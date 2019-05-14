@@ -8,6 +8,11 @@ http://quotes.money.163.com/service/chddata.html?code=1000611&start=19961008&end
 ```bash
 mv  /Users/zdm/Downloads/*.csv /Users/zdm/idea-workspace/stock/stockhistory
 ```
+移动文件到指定目录除开包含()的文件
+```bash
+shopt -s extglob
+mv -f /Users/zdm/Downloads/!(*[()]*).csv /Users/zdm/idea-workspace/StockProject/csvfiles
+```
 
 ## 文件导入
 
