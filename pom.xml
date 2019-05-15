@@ -16,6 +16,8 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<opencsv.version>4.6</opencsv.version>
+		<asynchttpclient.version>2.8.1</asynchttpclient.version>
 	</properties>
 
 	<dependencies>
@@ -23,6 +25,21 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/com.opencsv/opencsv -->
+		<dependency>
+		    <groupId>com.opencsv</groupId>
+		    <artifactId>opencsv</artifactId>
+		    <version>${opencsv.version}</version>
+		</dependency>
+		
+	<!-- https://mvnrepository.com/artifact/org.asynchttpclient/async-http-client -->
+		<dependency>
+		    <groupId>org.asynchttpclient</groupId>
+		    <artifactId>async-http-client</artifactId>
+		    <version>${asynchttpclient.version}</version>
+		</dependency>
+	
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -30,6 +47,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+		
 
 	<build>
 		<plugins>
