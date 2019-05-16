@@ -18,10 +18,8 @@ public class FileDownloadTest {
 	public static String FILE_NAME = "/Users/zdm/eclipse-workspace/StockProject/csvfiles/test.csv";
 	
 	@Test
-	public void downloadWithAsyncHttpClientTest() {
-		
+	public void returnFileSizeGT0() {
 		FileDownload.downloadWithAsyncHttpClient(FILE_URL, FILE_NAME);
-		
 		File file = new File(FILE_NAME);
 		Assert.assertTrue("test.csv".equals(file.getName()));
 		Assert.assertTrue(0 < file.getTotalSpace());
