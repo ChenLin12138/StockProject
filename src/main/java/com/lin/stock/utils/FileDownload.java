@@ -3,6 +3,7 @@ package com.lin.stock.utils;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.LineNumberReader;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
@@ -24,33 +25,65 @@ import org.asynchttpclient.Response;
  */
 
 public class FileDownload {
+	
+	public static int FILE_HEADER_SIZE = 108;
 
 	public static void downloadFile(String fileUrl, String fileName){
 		
 		try(InputStream in = new URL(fileUrl).openStream()){
-			Files.copy(in, Paths.get(fileName), StandardCopyOption.REPLACE_EXISTING);
+			if(in.available() > FILE_HEADER_SIZE) {
+				Files.copy(in, Paths.get(fileName), StandardCopyOption.REPLACE_EXISTING);
+			}
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static void downloadWithNIO(String fileUrl, String fileName) throws IOException {
+	public static void downloadWithNIO(String fileUrl, String fileName){
 		
-		URL url = new URL(fileUrl);
+		InputStream in = null;
+		ReadableByteChannel readableByteChannel = null;
+		FileOutputStream fileOutputStream = null;
 		
-		try(
-			ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
-			FileOutputStream fileOutputStream = new FileOutputStream(fileName);
-			FileChannel fileChannel = fileOutputStream.getChannel();
-			){
-			fileOutputStream.getChannel()
-			  .transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+		try {
+			URL url = new URL(fileUrl);
+			in = url.openStream();
+			readableByteChannel = Channels.newChannel(in);
+			if(in.available() > FILE_HEADER_SIZE) {
+				//创建输出文件
+				fileOutputStream = new FileOutputStream(fileName);
+				fileOutputStream.getChannel()
+				  .transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+			}
 		}catch(IOException e) {
 			e.printStackTrace();
-		}
-		
+		}finally {
+			if(null != in){
+				try {
+					in.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if(null != readableByteChannel){
+				try {
+					readableByteChannel.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if(null != fileOutputStream){
+				try {
+					fileOutputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		}		
 	}
 	
+	//这个原理机制暂时不清楚，效率也没上去，暂时我 不使用这个方法
 	public static void downloadWithAsyncHttpClient(String fileUrl, String fileName){
   
         try(
@@ -62,8 +95,11 @@ public class FileDownload {
 
                  @Override
                  public State onBodyPartReceived(HttpResponseBodyPart bodyPart) throws Exception {
-                     stream.getChannel()
-                         .write(bodyPart.getBodyByteBuffer());
+                	 
+                	 if(FILE_HEADER_SIZE != bodyPart.length()) {
+                		 stream.getChannel()
+                         .write(bodyPart.getBodyByteBuffer()); 
+                	 }
                      return State.CONTINUE;
                  }
 

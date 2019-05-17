@@ -28,26 +28,27 @@ public class DownloadEffectiveTest {
 	public void test() throws IOException {
 
 		StopWatch sw = new StopWatch();
-
-		sw.start("Method downloadFile");
-		for (int i = 611; i < 671; i++) {
-			FileDownload.downloadFile(createUrl(stockCodeGenerate(i)), FILE_NAME + stockCodeGenerate(i) + FILE_SUFFIX);
-		}
-		sw.stop();
-
-		sw.start("Method downloadWithNIO");
-		for (int i = 611; i < 671; i++) {
-			FileDownload.downloadWithNIO(createUrl(stockCodeGenerate(i)),
-					FILE_NAME + stockCodeGenerate(i) + FILE_SUFFIX);
-		}
-		sw.stop();
-
+		
+//		sw.start("Method downloadWithNIO");
+//		for (int i = 611; i < 641; i++) {
+//			FileDownload.downloadWithNIO(createUrl(stockCodeGenerate(i)),
+//					FILE_NAME + stockCodeGenerate(i) + FILE_SUFFIX);
+//		}
+//		sw.stop();
+		
+		
 		sw.start("Method downloadWithAsyncHttpClient");
-		for (int i = 611; i < 671; i++) {
+		for (int i = 611; i < 641; i++) {
 			FileDownload.downloadWithAsyncHttpClient(createUrl(stockCodeGenerate(i)),
 					FILE_NAME + stockCodeGenerate(i) + FILE_SUFFIX);
 		}
 		sw.stop();
+//
+//		sw.start("Method downloadFile");
+//		for (int i = 611; i < 641; i++) {
+//			FileDownload.downloadFile(createUrl(stockCodeGenerate(i)), FILE_NAME + stockCodeGenerate(i) + FILE_SUFFIX);
+//		}
+//		sw.stop();
 
 		System.out.println(sw.prettyPrint());
 
