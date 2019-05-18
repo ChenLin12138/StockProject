@@ -1,5 +1,9 @@
 package com.lin.stock.dao.mappers.test;
 
+import static org.junit.Assert.assertTrue;
+
+import java.util.Date;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
@@ -28,8 +32,26 @@ public class PriceHistoryMapperTest {
 	PriceHistoryMapper mapper;
 	
 	@Test
-	@Rollback(false)
 	public void shouldReturnAPriceHistory() {
-		mapper.insert(new PriceHistory());
+		PriceHistory history = new PriceHistory();
+		
+		history.setPk(1l);
+		history.setChg(1f);
+		history.setDate(new Date());
+		history.setHigh(1f);
+		history.setLow(1f);
+		history.setPchg(1f);
+		history.setTclose(1f);
+		history.setTopen(1f);
+		history.setTurnoverrate(1f);
+		history.setVaturnover(1f);
+		history.setVoturnover(1);
+		mapper.insert(history);
+		
+		PriceHistory result = new PriceHistory();
+		result.setPk(1l);
+		result = mapper.selectById(result);
+		
+		assertTrue(result.equals(history));
 	}
 }
