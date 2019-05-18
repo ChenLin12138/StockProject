@@ -23,12 +23,12 @@
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="com.lin.stock.mappers"
+        <sqlMapGenerator targetPackage="com.lin.stock.dao.mappers"
                          targetProject="/Users/zdm/eclipse-workspace/StockProject/src/main/java">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
         
-        <javaClientGenerator targetPackage="com.lin.stock.mappers"
+        <javaClientGenerator targetPackage="com.lin.stock.dao.mappers"
                              targetProject="/Users/zdm/eclipse-workspace/StockProject/src/main/java" type="XMLMAPPER">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>   

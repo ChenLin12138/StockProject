@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.lin.stock.mappers.PriceHistoryMapper;
+import com.lin.stock.dao.mappers.PriceHistoryMapper;
 
 /**
  * @author Chen Lin
@@ -31,7 +31,7 @@ public class MybatisMapperConfig {
 	@Bean
 	public SqlSessionTemplate sqlSessionTemplate() throws Exception {
 		SqlSessionTemplate sessionTemplate = new SqlSessionTemplate(sqlSessionFactory());
-		sessionTemplate.getConfiguration().addMappers("com.lin.stock.mappers");
+		sessionTemplate.getConfiguration().addMappers("com.lin.stock.dao.mappers");
 		return sessionTemplate;
 	}
 

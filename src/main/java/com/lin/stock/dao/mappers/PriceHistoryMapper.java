@@ -1,4 +1,4 @@
-package com.lin.stock.mappers;
+package com.lin.stock.dao.mappers;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;

@@ -1,4 +1,4 @@
-package com.lin.stock.mappers.test;
+package com.lin.stock.dao.mappers.test;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.lin.stock.config.DataSourceConfig;
 import com.lin.stock.config.MybatisMapperConfig;
-import com.lin.stock.mappers.PriceHistoryMapper;
+import com.lin.stock.dao.mappers.PriceHistoryMapper;
 import com.lin.stock.model.PriceHistory;
 
 /**
@@ -27,6 +27,7 @@ public class PriceHistoryMapperTest {
 	@Autowired
 	PriceHistoryMapper mapper;
 	
+	@Test
 	@Rollback(false)
 	public void shouldReturnAPriceHistory() {
 		mapper.insert(new PriceHistory());
