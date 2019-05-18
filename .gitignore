@@ -1,5 +1,6 @@
 ##ignore this file
 /target/
+/src/main/resources/csvfiles
 
 ##ignore .classpath
 .classpath
@@ -15,4 +16,3 @@
 
 ##ignore others
 .DS_Store
-/csvfiles/

@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.util.StopWatch;
 
+import com.lin.constant.StringConstant;
 import com.lin.stock.model.FileDownloadURL;
 import com.lin.stock.utils.FileDownload;
 
@@ -16,7 +17,6 @@ import com.lin.stock.utils.FileDownload;
 
 public class DownloadEffectiveTest {
 
-	public static String FILE_NAME = "/Users/zdm/eclipse-workspace/StockProject/csvfiles/";
 	public static String FILE_SUFFIX = ".csv";
 
 	@Before
@@ -29,24 +29,23 @@ public class DownloadEffectiveTest {
 
 		StopWatch sw = new StopWatch();
 		
-//		sw.start("Method downloadWithNIO");
-//		for (int i = 611; i < 641; i++) {
-//			FileDownload.downloadWithNIO(createUrl(stockCodeGenerate(i)),
-//					FILE_NAME + stockCodeGenerate(i) + FILE_SUFFIX);
-//		}
-//		sw.stop();
-		
-		
-		sw.start("Method downloadWithAsyncHttpClient");
-		for (int i = 611; i < 641; i++) {
-			FileDownload.downloadWithAsyncHttpClient(createUrl(stockCodeGenerate(i)),
-					FILE_NAME + stockCodeGenerate(i) + FILE_SUFFIX);
+		sw.start("Method downloadWithNIO");
+		for (int i = 611; i < 612; i++) {
+			FileDownload.downloadWithNIO(createUrl(stockCodeGenerate(i)),
+					StringConstant.CSVFILES_PATH + stockCodeGenerate(i) + FILE_SUFFIX);
 		}
 		sw.stop();
+	
+//		sw.start("Method downloadWithAsyncHttpClient");
+//		for (int i = 611; i < 641; i++) {
+//			FileDownload.downloadWithAsyncHttpClient(createUrl(stockCodeGenerate(i)),
+//					StringConstant.CSVFILES_PATH + stockCodeGenerate(i) + FILE_SUFFIX);
+//		}
+//		sw.stop();
 //
 //		sw.start("Method downloadFile");
 //		for (int i = 611; i < 641; i++) {
-//			FileDownload.downloadFile(createUrl(stockCodeGenerate(i)), FILE_NAME + stockCodeGenerate(i) + FILE_SUFFIX);
+//			FileDownload.downloadFile(createUrl(stockCodeGenerate(i)), StringConstant.CSVFILES_PATH + stockCodeGenerate(i) + FILE_SUFFIX);
 //		}
 //		sw.stop();
 

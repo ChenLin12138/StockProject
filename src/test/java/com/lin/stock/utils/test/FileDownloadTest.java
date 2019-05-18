@@ -8,6 +8,7 @@ import java.io.IOException;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.lin.constant.StringConstant;
 import com.lin.stock.utils.FileDownload;
 
 /**
@@ -18,13 +19,13 @@ import com.lin.stock.utils.FileDownload;
 public class FileDownloadTest {
 
 	public static String FILE_URL = "http://quotes.money.163.com/service/chddata.html?code=1000611&start=19961008&end=20190513&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP";
-	public static String FILE_NAME = "/Users/zdm/eclipse-workspace/StockProject/csvfiles/test.csv";
+	public static String FILE_NAME = StringConstant.CSVFILES_PATH+"test.csv";
 	public static String NO_CONTENT_FILE_URL = "http://quotes.money.163.com/service/chddata.html?code=1000624&start=19961008&end=20190513&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP";
-			public static String NO_CONTENT_FILE_NAME =	"/Users/zdm/eclipse-workspace/StockProject/csvfiles/nocontent.csv";	
+	public static String NO_CONTENT_FILE_NAME =	StringConstant.CSVFILES_PATH+"nocontent.csv";	
 	
 	@Test
 	public void returnFileSizeGT0() {
-		FileDownload.downloadWithAsyncHttpClient(FILE_URL, FILE_NAME);
+		FileDownload.downloadWithNIO(FILE_URL, FILE_NAME);
 		File file = new File(FILE_NAME);
 		Assert.assertTrue("test.csv".equals(file.getName()));
 		Assert.assertTrue(0 < file.getTotalSpace());
