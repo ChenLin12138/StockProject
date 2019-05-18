@@ -81,26 +81,20 @@ mv -f /Users/zdm/Downloads/!(*[()]*).csv /Users/zdm/eclipse-workspace/StockProje
 
 ## 数据库定义
 ```sql
-CREATE TABLE stock.stock_priceinfo (
-	pk BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-	`date` DATE NOT NULL,
-	endPrice FLOAT NOT NULL,
-	highPrice FLOAT NOT NULL,
-	lowPrice FLOAT NOT NULL,
-	startPrice FLOAT NOT NULL,
-	deltaPrice FLOAT NOT NULL,
-	deltaRate FLOAT NOT NULL,
-	exchangeRate FLOAT NOT NULL,
-	turnover INTEGER UNSIGNED NOT NULL,
-	amount FLOAT NOT NULL,
-	MC FLOAT NOT NULL,
-	FAMC FLOAT NOT NULL,
-	CONSTRAINT stock_priceinfo_PK PRIMARY KEY (pk)
-)
-ENGINE=InnoDB
-DEFAULT CHARSET=utf8
-COLLATE=utf8_bin
-AUTO_INCREMENT=1;
+CREATE TABLE `PRICE_HISTORY` (
+  `pk` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `DATE` date NOT NULL,
+  `TCLOSE` float NOT NULL,
+  `HIGH` float NOT NULL,
+  `LOW` float NOT NULL,
+  `TOPEN` float NOT NULL,
+  `CHG` float NOT NULL,
+  `PCHG` float NOT NULL,
+  `TURNOVERRATE` float NOT NULL,
+  `VOTURNOVER` int(10) unsigned NOT NULL,
+  `VATURNOVER` float NOT NULL,
+  PRIMARY KEY (`pk`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 ```
 
 ## 那些不存在的股票代码
