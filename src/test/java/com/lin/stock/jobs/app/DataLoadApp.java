@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.lin.stock.config.DataSourceConfig;
 import com.lin.stock.config.MybatisMapperConfig;
+import com.lin.stock.constant.FileConstant;
 import com.lin.stock.jobs.DataLoadJob;
 
 /**
@@ -37,5 +38,11 @@ public class DataLoadApp {
 	@Rollback(false)
 	public void fullDataLoad() throws IOException, ParseException {
 		job.fullLoad();
+	}
+	
+	@Test
+	@Rollback(false)
+	public void loadFile2DataBaseTest() throws IOException {
+		job.loadFile2DataBase(FileConstant.CSVFILE_PATH+"600050"+FileConstant.CSV_FILE_SUFFIX);
 	}
 }

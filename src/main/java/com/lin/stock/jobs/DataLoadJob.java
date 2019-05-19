@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,42 +59,43 @@ public class DataLoadJob {
 					.tclose().high().low().topen().lclose().chg()
 					.pchg().turnover().voturnover().vaturnover()
 					.build();		
-			FileDownload.downloadWithNIO(url.getURL(),getOutFileName(stockCode));		
-			CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(getOutFileName(stockCode)),"UTF-8"));
-			//Skip The header
-			reader.skip(1);
-			Iterator<String[]> iter = reader.iterator();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			while(iter.hasNext()) {
-				String[] rowData = iter.next();
-				PriceHistory priceHistory = new PriceHistory();
-				if(!isSuspendedTrading(rowData)) {
-					try {
-						priceHistory.setDate(sdf.parse(rowData[0]));
-						priceHistory.setCode(removeQuoteForStockCode(rowData[1]));
-						priceHistory.setTclose(Float.parseFloat(rowData[3]));
-						priceHistory.setHigh(Float.parseFloat(rowData[4]));
-						priceHistory.setLow(Float.parseFloat(rowData[5]));
-						priceHistory.setTopen(Float.parseFloat(rowData[6]));
-						priceHistory.setChg(chgParse(rowData[8]));
-						priceHistory.setPchg(pChgParse(rowData[9]));
-						priceHistory.setTurnoverrate(Float.parseFloat(rowData[10]));
-						priceHistory.setVoturnover(Integer.parseInt(rowData[11]));
-						priceHistory.setVaturnover(Float.parseFloat(rowData[12]));
-						mapper.insert(priceHistory);
-					}catch(ParseException e) {
-						System.out.println("Date is : " + rowData[0] +" Stock is : "+ removeQuoteForStockCode(rowData[10]));
-						e.printStackTrace();	
-					}catch(NumberFormatException e) {
-						System.out.println("Date is : " + rowData[0] +" Stock is : "+ removeQuoteForStockCode(rowData[10]));
-						e.printStackTrace();
-					}catch(Exception e) {
-						System.out.println("Date is : " + rowData[0] +" Stock is : "+ removeQuoteForStockCode(rowData[10]));
-						e.printStackTrace();
-					}
+			FileDownload.downloadWithNIO(url.getURL(),getOutFileName(stockCode));	
+			loadFile2DataBase(getOutFileName(stockCode));
+		}		
+	}
+	
+	public void loadFile2DataBase(String filePath) throws IOException {
+		CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(filePath),"UTF-8"));
+		//Skip The header
+		reader.skip(1);
+		Iterator<String[]> iter = reader.iterator();
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		while(iter.hasNext()) {
+			String[] rowData = iter.next();
+			PriceHistory priceHistory = new PriceHistory();
+			if(!isSuspendedTrading(rowData)) {
+				try {
+					priceHistory.setDate(rowData[0].replaceAll("-", ""));
+					priceHistory.setCode(removeQuoteForStockCode(rowData[1]));
+					priceHistory.setTclose(Float.parseFloat(rowData[3]));
+					priceHistory.setHigh(Float.parseFloat(rowData[4]));
+					priceHistory.setLow(Float.parseFloat(rowData[5]));
+					priceHistory.setTopen(Float.parseFloat(rowData[6]));
+					priceHistory.setChg(chgParse(rowData[8]));
+					priceHistory.setPchg(pChgParse(rowData[9]));
+					priceHistory.setTurnoverrate(Float.parseFloat(rowData[10]));
+					priceHistory.setVoturnover(Integer.parseInt(rowData[11]));
+					priceHistory.setVaturnover(Float.parseFloat(rowData[12]));
+					mapper.insert(priceHistory);
+				}catch(NumberFormatException e) {
+					System.out.println("Date is : " + rowData[0] +" Stock is : "+ removeQuoteForStockCode(rowData[10]));
+					e.printStackTrace();
+				}catch(Exception e) {
+					System.out.println("Date is : " + rowData[0] +" Stock is : "+ removeQuoteForStockCode(rowData[10]));
+					e.printStackTrace();
 				}
 			}
-		}		
+		}
 	}
 	
 	private String removeQuoteForStockCode(String rowString) {

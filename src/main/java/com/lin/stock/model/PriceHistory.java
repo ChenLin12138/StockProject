@@ -7,7 +7,7 @@ public class PriceHistory {
 
     private String code;
     
-    private Date date;
+    private String date;
 
     private Float tclose;
 
@@ -43,11 +43,11 @@ public class PriceHistory {
 		this.code = code;
 	}
 
-	public Date getDate() {
+	public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

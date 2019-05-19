@@ -83,8 +83,8 @@ mv -f /Users/zdm/Downloads/!(*[()]*).csv /Users/zdm/eclipse-workspace/StockProje
 ```sql
 CREATE TABLE `PRICE_HISTORY` (
   `pk` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `CODE` char(10) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `DATE` date NOT NULL,
+  `CODE` char(6) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `DATE` char(8) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `TCLOSE` float NOT NULL,
   `HIGH` float NOT NULL,
   `LOW` float NOT NULL,
@@ -95,7 +95,7 @@ CREATE TABLE `PRICE_HISTORY` (
   `VOTURNOVER` int(10) unsigned NOT NULL,
   `VATURNOVER` float NOT NULL,
   PRIMARY KEY (`pk`)
-) ENGINE=InnoDB AUTO_INCREMENT=849 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 ```
 
 ## 那些不存在的股票代码
@@ -103,4 +103,18 @@ CREATE TABLE `PRICE_HISTORY` (
 /Users/zdm/eclipse-workspace/StockProject/csvfiles/000624.csv: 108
 /Users/zdm/eclipse-workspace/StockProject/csvfiles/000634.csv: 108
 /Users/zdm/eclipse-workspace/StockProject/csvfiles/000640.csv: 108
+
+## Bug List
+这种读取出来的2019-05-19的数据，在写入数据库的时候变成了2019-05-16,可能和时间地区有关
+2019-05-17,'600051,宁波联合,6.3,6.59,6.27,6.56,6.55,-0.25,-3.8168,1.1525,3582877,22993286.0
+java代码
+```java
+					priceHistory.setDate(sdf.parse(rowData[0]));
+					priceHistory.setCode(removeQuoteForStockCode(rowData[1]));
+```
+数据库定义date类型
+```sql
+`DATE` date NOT NULL,
+```
+解决：和数据库时区设置有关系，直接修改成字符类型，不用Date类型了。
 

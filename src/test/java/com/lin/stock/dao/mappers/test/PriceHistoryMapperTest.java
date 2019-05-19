@@ -37,7 +37,8 @@ public class PriceHistoryMapperTest {
 		
 		history.setPk(1l);
 		history.setChg(1f);
-		history.setDate(new Date());
+		history.setCode("600030");
+		history.setDate("19900101");
 		history.setHigh(1f);
 		history.setLow(1f);
 		history.setPchg(1f);
