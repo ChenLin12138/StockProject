@@ -36,9 +36,25 @@ public class DataLoadJob {
 //		fullDownloadFor1Market(StockMarket.SHENZHENG.getValue());
 	}
 	
+	/*
+	 * 此下载的股票格式的描述
+	 * rowData[0]:交易日期
+	 * rowData[1]:股票代码
+	 * rowData[2]:股票名称
+	 * rowData[3]:收盘价
+	 * rowData[4]:最高价
+	 * rowData[5]:最低价
+	 * rowData[6]:开盘价
+	 * rowData[7]:昨日收盘
+	 * rowData[8]:涨跌额
+	 * rowData[9]:涨跌幅
+	 * rowData[10]:换手率
+	 * rowData[11]:成交量
+	 * rowData[11]:成交金额
+	 * */
 	public void fullDownloadFor1Market(String marketCode) throws IOException {
 		
-		for(int stockCode = 600051 ; stockCode < 600051; stockCode++) {	
+		for(int stockCode = 600051 ; stockCode < 600052; stockCode++) {	
 			FileDownloadURL url = new FileDownloadURL.Builder(marketCode, StockCodeGenerator.generate(stockCode), "19900101", "30000101")
 					//这些变量的构造顺序决定了下载下来csv文件的顺序
 					.tclose().high().low().topen().lclose().chg()
@@ -61,20 +77,20 @@ public class DataLoadJob {
 						priceHistory.setHigh(Float.parseFloat(rowData[4]));
 						priceHistory.setLow(Float.parseFloat(rowData[5]));
 						priceHistory.setTopen(Float.parseFloat(rowData[6]));
-						priceHistory.setChg(Float.parseFloat(rowData[8]));
-						priceHistory.setPchg(Float.parseFloat(rowData[9]));
+						priceHistory.setChg(chgParse(rowData[8]));
+						priceHistory.setPchg(pChgParse(rowData[9]));
 						priceHistory.setTurnoverrate(Float.parseFloat(rowData[10]));
 						priceHistory.setVoturnover(Integer.parseInt(rowData[11]));
 						priceHistory.setVaturnover(Float.parseFloat(rowData[12]));
 						mapper.insert(priceHistory);
 					}catch(ParseException e) {
-						System.out.println("Date is : " + rowData[0] +"Stock is : "+ removeQuoteForStockCode(rowData[10]));
+						System.out.println("Date is : " + rowData[0] +" Stock is : "+ removeQuoteForStockCode(rowData[10]));
 						e.printStackTrace();	
 					}catch(NumberFormatException e) {
-						System.out.println("Date is : " + rowData[0] +"Stock is : "+ removeQuoteForStockCode(rowData[10]));
+						System.out.println("Date is : " + rowData[0] +" Stock is : "+ removeQuoteForStockCode(rowData[10]));
 						e.printStackTrace();
 					}catch(Exception e) {
-						System.out.println("Date is : " + rowData[0] +"Stock is : "+ removeQuoteForStockCode(rowData[10]));
+						System.out.println("Date is : " + rowData[0] +" Stock is : "+ removeQuoteForStockCode(rowData[10]));
 						e.printStackTrace();
 					}
 				}
@@ -84,6 +100,27 @@ public class DataLoadJob {
 	
 	private String removeQuoteForStockCode(String rowString) {
 		return rowString.substring(1);
+	}
+	
+	private Float chgParse(String rowData) {
+		if(isFirstTradDate(rowData)) {
+			return 0f;
+		}
+		return Float.parseFloat(rowData);
+	}
+	
+	private Float pChgParse(String rowData) {
+		if(isFirstTradDate(rowData)) {
+			return 0f;
+		}
+		return Float.parseFloat(rowData);
+	}
+	
+	private boolean isFirstTradDate(String rowData) {
+		if("None".equals(rowData)) {
+			return true;
+		}
+		return false;
 	}
 	
 	private boolean isSuspendedTrading(String[] rowData) {
