@@ -1,7 +1,7 @@
 package com.lin.stock.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Chen Lin
@@ -15,7 +15,7 @@ public class FileDownloadURL {
 	private final String stock_code;
 	private final String start;
 	private final String end;
-	private final Set<String> fields = new HashSet<String>();
+	private final List<String> fields = new ArrayList<String>();
 	
 	//使用Java嵌套类的机制构造builder
 	public static class Builder {
@@ -25,7 +25,7 @@ public class FileDownloadURL {
 	private final String start;
 	private final String end;
 	// optional parameters
-	private final Set<String> fields = new HashSet<String>();
+	private final List<String> fields = new ArrayList<String>();
 	//构造器必填选项
 	public Builder(String market_code, String stock_code, String start, String end) {
 		this.market_code = market_code;

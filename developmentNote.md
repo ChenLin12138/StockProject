@@ -83,6 +83,7 @@ mv -f /Users/zdm/Downloads/!(*[()]*).csv /Users/zdm/eclipse-workspace/StockProje
 ```sql
 CREATE TABLE `PRICE_HISTORY` (
   `pk` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `CODE` char(10) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `DATE` date NOT NULL,
   `TCLOSE` float NOT NULL,
   `HIGH` float NOT NULL,
@@ -94,8 +95,7 @@ CREATE TABLE `PRICE_HISTORY` (
   `VOTURNOVER` int(10) unsigned NOT NULL,
   `VATURNOVER` float NOT NULL,
   PRIMARY KEY (`pk`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
+) ENGINE=InnoDB AUTO_INCREMENT=849 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 ```
 
 ## 那些不存在的股票代码
