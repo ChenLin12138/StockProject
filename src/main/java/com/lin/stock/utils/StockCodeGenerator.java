@@ -8,7 +8,7 @@ package com.lin.stock.utils;
 public class StockCodeGenerator {
 
 	public static String generate(int stockCode) {
-		return String.format("%06d", stockCode);
+		return String.format("%03d", stockCode);
 	}
 	
 }

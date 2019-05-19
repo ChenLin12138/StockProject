@@ -3,6 +3,7 @@ package com.lin.stock.model.test;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.lin.stock.constant.StockMarket;
 import com.lin.stock.model.FileDownloadURL;
 
 /**
@@ -24,4 +25,28 @@ public class FileDownloadURLTest {
 				.build();
 		System.out.println(fd.getURL());	
 	}
+	
+	@Test
+	public void testShangHai1Stock() {
+		FileDownloadURL fd = 
+				new FileDownloadURL.Builder(StockMarket.SHANGHAI1.getValue(),"611","19961006","20190513")
+				.voturnover().vaturnover().turnover().topen()
+				.tclose().tcap().pchg().mcap()
+				.low().lclose().high().chg()
+				.build();
+		System.out.println(fd.getURL());	
+	}
+	
+	@Test
+	public void testSecondStock() {
+		FileDownloadURL fd = 
+				new FileDownloadURL.Builder(StockMarket.SECOND.getValue(),"611","19961006","20190513")
+				.voturnover().vaturnover().turnover().topen()
+				.tclose().tcap().pchg().mcap()
+				.low().lclose().high().chg()
+				.build();
+		System.out.println(fd.getURL());	
+	}
+	
+	
 }

@@ -28,11 +28,21 @@ public class DataLoadJob {
 	
 	@Autowired
 	private PriceHistoryMapper mapper;
-	
+	/*
+	 * 	SHANGHAI1("0600"),
+	 *	SHANGHAI2("0601"),
+	 *	SHANGHAI3("0603"),
+	 *	SHENZHENG("1000"),
+	 *	SMALL("1002"),
+	 *	SECOND("1300");
+	 * */
 	public void fullLoad() throws IOException, ParseException {
-		
-		fullDownloadFor1Market(StockMarket.SHANGHAI.getValue());
-//		fullDownloadFor1Market(StockMarket.SHENZHENG.getValue());
+		fullDownloadFor1Market(StockMarket.SHANGHAI1.getValue());
+		fullDownloadFor1Market(StockMarket.SHANGHAI2.getValue());
+		fullDownloadFor1Market(StockMarket.SHANGHAI3.getValue());
+		fullDownloadFor1Market(StockMarket.SHENZHENG.getValue());
+		fullDownloadFor1Market(StockMarket.SMALL.getValue());
+		fullDownloadFor1Market(StockMarket.SECOND.getValue());
 	}
 	
 	/*
@@ -53,23 +63,24 @@ public class DataLoadJob {
 	 * */
 	public void fullDownloadFor1Market(String marketCode) throws IOException {
 		
-		for(int stockCode = 600051 ; stockCode < 600052; stockCode++) {	
+		for(int stockCode = 1 ; stockCode < 999; stockCode++) {	
 			FileDownloadURL url = new FileDownloadURL.Builder(marketCode, StockCodeGenerator.generate(stockCode), "19900101", "30000101")
 					//这些变量的构造顺序决定了下载下来csv文件的顺序
 					.tclose().high().low().topen().lclose().chg()
 					.pchg().turnover().voturnover().vaturnover()
 					.build();		
-			FileDownload.downloadWithNIO(url.getURL(),getOutFileName(stockCode));	
-			loadFile2DataBase(getOutFileName(stockCode));
+			FileDownload.downloadWithNIO(url.getURL(),getOutFileName(marketCode,stockCode));	
+			loadFile2DataBase(getOutFileName(marketCode,stockCode));
 		}		
 	}
 	
 	public void loadFile2DataBase(String filePath) throws IOException {
+		
+		System.out.println("Start Loading Stock File: "+filePath);
 		CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(filePath),"UTF-8"));
 		//Skip The header
 		reader.skip(1);
 		Iterator<String[]> iter = reader.iterator();
-//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		while(iter.hasNext()) {
 			String[] rowData = iter.next();
 			PriceHistory priceHistory = new PriceHistory();
@@ -132,13 +143,9 @@ public class DataLoadJob {
 		return false;
 	}
 	
-	private String getOutFileName(int stockCode){
-		return FileConstant.CSVFILE_PATH+StockCodeGenerator.generate(stockCode)+FileConstant.CSV_FILE_SUFFIX;
+	private String getOutFileName(String marketCode, int stockCode){
+		return FileConstant.CSVFILE_PATH+marketCode.substring(1)+StockCodeGenerator.generate(stockCode)+FileConstant.CSV_FILE_SUFFIX;
 	}
 	
-//	public static void main(String[] str) throws IOException {
-//		DataLoadJob job = new DataLoadJob();
-//		job.fullLoad();
-//	}
 	
 }

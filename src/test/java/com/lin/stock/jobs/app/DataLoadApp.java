@@ -12,11 +12,15 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.StopWatch;
 
+import com.lin.constant.StringConstant;
 import com.lin.stock.config.DataSourceConfig;
 import com.lin.stock.config.MybatisMapperConfig;
 import com.lin.stock.constant.FileConstant;
 import com.lin.stock.jobs.DataLoadJob;
+import com.lin.stock.utils.FileDownload;
+import com.lin.stock.utils.StockCodeGenerator;
 
 /**
  * @author Chen Lin
@@ -37,7 +41,13 @@ public class DataLoadApp {
 	@Test
 	@Rollback(false)
 	public void fullDataLoad() throws IOException, ParseException {
+				
+		StopWatch sw = new StopWatch();	
+		sw.start("Method downloadWithNIO");
 		job.fullLoad();
+		sw.stop();
+		System.out.println(sw.prettyPrint());
+
 	}
 	
 	@Test
