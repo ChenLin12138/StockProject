@@ -39,8 +39,9 @@ public class FileDownload {
 		}
 	}
 
-	public static void downloadWithNIO(String fileUrl, String fileName){
+	public static boolean downloadWithNIO(String fileUrl, String fileName){
 		
+		boolean downloadSuccess = false;
 		InputStream in = null;
 		ReadableByteChannel readableByteChannel = null;
 		FileOutputStream fileOutputStream = null;
@@ -54,6 +55,7 @@ public class FileDownload {
 				fileOutputStream = new FileOutputStream(fileName);
 				fileOutputStream.getChannel()
 				  .transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+				downloadSuccess = true;
 			}
 		}catch(IOException e) {
 			e.printStackTrace();
@@ -80,7 +82,9 @@ public class FileDownload {
 				}
 			}
 			
-		}		
+		}	
+		
+		return downloadSuccess;
 	}
 	
 	//这个原理机制暂时不清楚，效率也没上去，暂时我 不使用这个方法

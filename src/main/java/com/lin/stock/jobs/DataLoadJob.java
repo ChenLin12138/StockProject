@@ -63,14 +63,15 @@ public class DataLoadJob {
 	 * */
 	public void fullDownloadFor1Market(String marketCode) throws IOException {
 		
-		for(int stockCode = 1 ; stockCode < 999; stockCode++) {	
+		for(int stockCode = 16 ; stockCode < 999; stockCode++) {	
 			FileDownloadURL url = new FileDownloadURL.Builder(marketCode, StockCodeGenerator.generate(stockCode), "19900101", "30000101")
 					//这些变量的构造顺序决定了下载下来csv文件的顺序
 					.tclose().high().low().topen().lclose().chg()
 					.pchg().turnover().voturnover().vaturnover()
 					.build();		
-			FileDownload.downloadWithNIO(url.getURL(),getOutFileName(marketCode,stockCode));	
-			loadFile2DataBase(getOutFileName(marketCode,stockCode));
+			if(FileDownload.downloadWithNIO(url.getURL(),getOutFileName(marketCode,stockCode))) {
+				loadFile2DataBase(getOutFileName(marketCode,stockCode));
+			}
 		}		
 	}
 	
