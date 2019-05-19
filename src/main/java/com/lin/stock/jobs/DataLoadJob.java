@@ -1,10 +1,8 @@
 package com.lin.stock.jobs;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
@@ -38,9 +36,9 @@ public class DataLoadJob {
 //		fullDownloadFor1Market(StockMarket.SHENZHENG.getValue());
 	}
 	
-	public void fullDownloadFor1Market(String marketCode) throws ParseException, IOException {
+	public void fullDownloadFor1Market(String marketCode) throws IOException {
 		
-		for(int stockCode = 600050 ; stockCode <= 600051; stockCode++) {	
+		for(int stockCode = 600051 ; stockCode < 600051; stockCode++) {	
 			FileDownloadURL url = new FileDownloadURL.Builder(marketCode, StockCodeGenerator.generate(stockCode), "19900101", "30000101")
 					//这些变量的构造顺序决定了下载下来csv文件的顺序
 					.tclose().high().low().topen().lclose().chg()
@@ -51,28 +49,50 @@ public class DataLoadJob {
 			//Skip The header
 			reader.skip(1);
 			Iterator<String[]> iter = reader.iterator();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			while(iter.hasNext()) {
 				String[] rowData = iter.next();
 				PriceHistory priceHistory = new PriceHistory();
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				priceHistory.setDate(sdf.parse(rowData[0]));
-				priceHistory.setCode(removeQuoteForStockCode(rowData[1]));
-				priceHistory.setTclose(Float.parseFloat(rowData[3]));
-				priceHistory.setHigh(Float.parseFloat(rowData[4]));
-				priceHistory.setLow(Float.parseFloat(rowData[5]));
-				priceHistory.setTopen(Float.parseFloat(rowData[6]));
-				priceHistory.setChg(Float.parseFloat(rowData[8]));
-				priceHistory.setPchg(Float.parseFloat(rowData[9]));
-				priceHistory.setTurnoverrate(Float.parseFloat(rowData[10]));
-				priceHistory.setVoturnover(Integer.parseInt(rowData[11]));
-				priceHistory.setVaturnover(Float.parseFloat(rowData[12]));
-				mapper.insert(priceHistory);
+				if(!isSuspendedTrading(rowData)) {
+					try {
+						priceHistory.setDate(sdf.parse(rowData[0]));
+						priceHistory.setCode(removeQuoteForStockCode(rowData[1]));
+						priceHistory.setTclose(Float.parseFloat(rowData[3]));
+						priceHistory.setHigh(Float.parseFloat(rowData[4]));
+						priceHistory.setLow(Float.parseFloat(rowData[5]));
+						priceHistory.setTopen(Float.parseFloat(rowData[6]));
+						priceHistory.setChg(Float.parseFloat(rowData[8]));
+						priceHistory.setPchg(Float.parseFloat(rowData[9]));
+						priceHistory.setTurnoverrate(Float.parseFloat(rowData[10]));
+						priceHistory.setVoturnover(Integer.parseInt(rowData[11]));
+						priceHistory.setVaturnover(Float.parseFloat(rowData[12]));
+						mapper.insert(priceHistory);
+					}catch(ParseException e) {
+						System.out.println("Date is : " + rowData[0] +"Stock is : "+ removeQuoteForStockCode(rowData[10]));
+						e.printStackTrace();	
+					}catch(NumberFormatException e) {
+						System.out.println("Date is : " + rowData[0] +"Stock is : "+ removeQuoteForStockCode(rowData[10]));
+						e.printStackTrace();
+					}catch(Exception e) {
+						System.out.println("Date is : " + rowData[0] +"Stock is : "+ removeQuoteForStockCode(rowData[10]));
+						e.printStackTrace();
+					}
+				}
 			}
 		}		
 	}
 	
 	private String removeQuoteForStockCode(String rowString) {
 		return rowString.substring(1);
+	}
+	
+	private boolean isSuspendedTrading(String[] rowData) {
+		
+		if("0".equals(rowData[11]) || "0".equals(rowData[12]) ) {
+			return true;
+		}
+
+		return false;
 	}
 	
 	private String getOutFileName(int stockCode){
