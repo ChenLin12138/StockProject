@@ -59,7 +59,7 @@ public class DataLoadJob {
 	 * rowData[9]:涨跌幅
 	 * rowData[10]:换手率
 	 * rowData[11]:成交量
-	 * rowData[11]:成交金额
+	 * rowData[12]:成交金额
 	 * */
 	public void fullDownloadFor1Market(String marketCode) throws IOException {
 		
@@ -100,10 +100,10 @@ public class DataLoadJob {
 					priceHistory.setVaturnover(Float.parseFloat(rowData[12]));
 					mapper.insert(priceHistory);
 				}catch(NumberFormatException e) {
-					System.out.println("Date is : " + rowData[0] +" Stock is : "+ removeQuoteForStockCode(rowData[10]));
+					System.out.println("Date is : " + rowData[0] +" Stock is : "+ removeQuoteForStockCode(rowData[1]));
 					e.printStackTrace();
 				}catch(Exception e) {
-					System.out.println("Date is : " + rowData[0] +" Stock is : "+ removeQuoteForStockCode(rowData[10]));
+					System.out.println("Date is : " + rowData[0] +" Stock is : "+ removeQuoteForStockCode(rowData[1]));
 					e.printStackTrace();
 				}
 			}
