@@ -37,10 +37,10 @@ public class DataLoadJob {
 	 *	SECOND("1300");
 	 * */
 	public void fullLoad() throws IOException, ParseException {
-		fullDownloadFor1Market(StockMarket.SHANGHAI1.getValue());
-		fullDownloadFor1Market(StockMarket.SHANGHAI2.getValue());
-		fullDownloadFor1Market(StockMarket.SHANGHAI3.getValue());
-		fullDownloadFor1Market(StockMarket.SHENZHENG.getValue());
+//		fullDownloadFor1Market(StockMarket.SHANGHAI1.getValue());
+//		fullDownloadFor1Market(StockMarket.SHANGHAI2.getValue());
+//		fullDownloadFor1Market(StockMarket.SHANGHAI3.getValue());
+//		fullDownloadFor1Market(StockMarket.SHENZHENG.getValue());
 		fullDownloadFor1Market(StockMarket.SMALL.getValue());
 		fullDownloadFor1Market(StockMarket.SECOND.getValue());
 	}
@@ -63,7 +63,7 @@ public class DataLoadJob {
 	 * */
 	public void fullDownloadFor1Market(String marketCode) throws IOException {
 		
-		for(int stockCode = 16 ; stockCode < 999; stockCode++) {	
+		for(int stockCode = 1 ; stockCode < 999; stockCode++) {	
 			FileDownloadURL url = new FileDownloadURL.Builder(marketCode, StockCodeGenerator.generate(stockCode), "19900101", "30000101")
 					//这些变量的构造顺序决定了下载下来csv文件的顺序
 					.tclose().high().low().topen().lclose().chg()
@@ -93,11 +93,11 @@ public class DataLoadJob {
 					priceHistory.setHigh(Float.parseFloat(rowData[4]));
 					priceHistory.setLow(Float.parseFloat(rowData[5]));
 					priceHistory.setTopen(Float.parseFloat(rowData[6]));
-					priceHistory.setChg(chgParse(rowData[8]));
-					priceHistory.setPchg(pChgParse(rowData[9]));
-					priceHistory.setTurnoverrate(Float.parseFloat(rowData[10]));
-					priceHistory.setVoturnover(Integer.parseInt(rowData[11]));
-					priceHistory.setVaturnover(Float.parseFloat(rowData[12]));
+					priceHistory.setChg(floatParse(rowData[8]));
+					priceHistory.setPchg(floatParse(rowData[9]));
+					priceHistory.setTurnoverrate(floatParse(rowData[10]));
+					priceHistory.setVoturnover(longParse(rowData[11]));
+					priceHistory.setVaturnover(doubleParse(rowData[12]));
 					mapper.insert(priceHistory);
 				}catch(NumberFormatException e) {
 					System.out.println("Date is : " + rowData[0] +" Stock is : "+ removeQuoteForStockCode(rowData[1]));
@@ -105,7 +105,11 @@ public class DataLoadJob {
 				}catch(Exception e) {
 					System.out.println("Date is : " + rowData[0] +" Stock is : "+ removeQuoteForStockCode(rowData[1]));
 					e.printStackTrace();
+				}finally {
+					reader.close();
 				}
+			}else {
+				reader.close();
 			}
 		}
 	}
@@ -114,21 +118,28 @@ public class DataLoadJob {
 		return rowString.substring(1);
 	}
 	
-	private Float chgParse(String rowData) {
-		if(isFirstTradDate(rowData)) {
+	private Float floatParse(String rowData) {
+		if(isDataNoneDate(rowData)) {
 			return 0f;
 		}
 		return Float.parseFloat(rowData);
 	}
 	
-	private Float pChgParse(String rowData) {
-		if(isFirstTradDate(rowData)) {
-			return 0f;
+	private Long longParse(String rowData) {
+		if(isDataNoneDate(rowData)) {
+			return 0l;
 		}
-		return Float.parseFloat(rowData);
+		return Long.parseLong(rowData);
 	}
 	
-	private boolean isFirstTradDate(String rowData) {
+	private Double doubleParse(String rowData) {
+		if(isDataNoneDate(rowData)) {
+			return 0d;
+		}
+		return Double.parseDouble(rowData);
+	}
+
+	private boolean isDataNoneDate(String rowData) {
 		if("None".equals(rowData)) {
 			return true;
 		}

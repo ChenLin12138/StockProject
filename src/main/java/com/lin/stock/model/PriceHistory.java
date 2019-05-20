@@ -1,8 +1,7 @@
 package com.lin.stock.model;
 
-import java.util.Date;
-
 public class PriceHistory {
+	
     private Long pk;
 
     private String code;
@@ -23,9 +22,9 @@ public class PriceHistory {
 
     private Float turnoverrate;
 
-    private Integer voturnover;
+    private Long voturnover;
 
-    private Float vaturnover;
+    private Double vaturnover;
 
     public Long getPk() {
         return pk;
@@ -107,19 +106,19 @@ public class PriceHistory {
         this.turnoverrate = turnoverrate;
     }
 
-    public Integer getVoturnover() {
+    public Long getVoturnover() {
         return voturnover;
     }
 
-    public void setVoturnover(Integer voturnover) {
+    public void setVoturnover(Long voturnover) {
         this.voturnover = voturnover;
     }
 
-    public Float getVaturnover() {
+    public Double getVaturnover() {
         return vaturnover;
     }
 
-    public void setVaturnover(Float vaturnover) {
+    public void setVaturnover(Double vaturnover) {
         this.vaturnover = vaturnover;
     }
 

@@ -45,8 +45,8 @@ public class PriceHistoryMapperTest {
 		history.setTclose(1f);
 		history.setTopen(1f);
 		history.setTurnoverrate(1f);
-		history.setVaturnover(1f);
-		history.setVoturnover(1);
+		history.setVaturnover(1d);
+		history.setVoturnover(1l);
 		mapper.insert(history);
 		
 		PriceHistory result = new PriceHistory();
