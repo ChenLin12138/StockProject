@@ -1,5 +1,6 @@
 package com.lin.stock.jobs;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -37,12 +38,25 @@ public class DataLoadJob {
 	 *	SECOND("1300");
 	 * */
 	public void fullLoad() throws IOException, ParseException {
-//		fullDownloadFor1Market(StockMarket.SHANGHAI1.getValue());
-//		fullDownloadFor1Market(StockMarket.SHANGHAI2.getValue());
-//		fullDownloadFor1Market(StockMarket.SHANGHAI3.getValue());
-//		fullDownloadFor1Market(StockMarket.SHENZHENG.getValue());
+		fullDownloadFor1Market(StockMarket.SHANGHAI1.getValue());
+		fullDownloadFor1Market(StockMarket.SHANGHAI2.getValue());
+		fullDownloadFor1Market(StockMarket.SHANGHAI3.getValue());
+		fullDownloadFor1Market(StockMarket.SHENZHENG.getValue());
 		fullDownloadFor1Market(StockMarket.SMALL.getValue());
 		fullDownloadFor1Market(StockMarket.SECOND.getValue());
+	}
+	
+	public void fullLoadFromFile() throws IOException{
+		
+		for(int stockCode = 1 ; stockCode < 999; stockCode++) {	
+			loadFile2DataBase(getOutFileName(StockMarket.SHANGHAI1.getValue(),stockCode));
+			loadFile2DataBase(getOutFileName(StockMarket.SHANGHAI2.getValue(),stockCode));
+			loadFile2DataBase(getOutFileName(StockMarket.SHANGHAI3.getValue(),stockCode));
+			loadFile2DataBase(getOutFileName(StockMarket.SHENZHENG.getValue(),stockCode));
+			loadFile2DataBase(getOutFileName(StockMarket.SMALL.getValue(),stockCode));
+			loadFile2DataBase(getOutFileName(StockMarket.SECOND.getValue(),stockCode));
+		}
+	
 	}
 	
 	/*
@@ -75,43 +89,43 @@ public class DataLoadJob {
 		}		
 	}
 	
-	public void loadFile2DataBase(String filePath) throws IOException {
+	public void loadFile2DataBase(String filePath) throws IOException {	
 		
-		System.out.println("Start Loading Stock File: "+filePath);
-		CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(filePath),"UTF-8"));
-		//Skip The header
-		reader.skip(1);
-		Iterator<String[]> iter = reader.iterator();
-		while(iter.hasNext()) {
-			String[] rowData = iter.next();
-			PriceHistory priceHistory = new PriceHistory();
-			if(!isSuspendedTrading(rowData)) {
-				try {
-					priceHistory.setDate(rowData[0].replaceAll("-", ""));
-					priceHistory.setCode(removeQuoteForStockCode(rowData[1]));
-					priceHistory.setTclose(Float.parseFloat(rowData[3]));
-					priceHistory.setHigh(Float.parseFloat(rowData[4]));
-					priceHistory.setLow(Float.parseFloat(rowData[5]));
-					priceHistory.setTopen(Float.parseFloat(rowData[6]));
-					priceHistory.setChg(floatParse(rowData[8]));
-					priceHistory.setPchg(floatParse(rowData[9]));
-					priceHistory.setTurnoverrate(floatParse(rowData[10]));
-					priceHistory.setVoturnover(longParse(rowData[11]));
-					priceHistory.setVaturnover(doubleParse(rowData[12]));
-					mapper.insert(priceHistory);
-				}catch(NumberFormatException e) {
-					System.out.println("Date is : " + rowData[0] +" Stock is : "+ removeQuoteForStockCode(rowData[1]));
-					e.printStackTrace();
-				}catch(Exception e) {
-					System.out.println("Date is : " + rowData[0] +" Stock is : "+ removeQuoteForStockCode(rowData[1]));
-					e.printStackTrace();
-				}finally {
-					reader.close();
+		if(new File(filePath).exists()) {
+			System.out.println("Start Loading Stock File: "+filePath);
+			CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(filePath),"UTF-8"));
+			//Skip The header
+			reader.skip(1);
+			Iterator<String[]> iter = reader.iterator();
+			while(iter.hasNext()) {
+				String[] rowData = iter.next();
+				PriceHistory priceHistory = new PriceHistory();
+				if(!isSuspendedTrading(rowData)) {
+					try {
+						priceHistory.setDate(rowData[0].replaceAll("-", ""));
+						priceHistory.setCode(removeQuoteForStockCode(rowData[1]));
+						priceHistory.setTclose(Float.parseFloat(rowData[3]));
+						priceHistory.setHigh(Float.parseFloat(rowData[4]));
+						priceHistory.setLow(Float.parseFloat(rowData[5]));
+						priceHistory.setTopen(Float.parseFloat(rowData[6]));
+						priceHistory.setChg(floatParse(rowData[8]));
+						priceHistory.setPchg(floatParse(rowData[9]));
+						priceHistory.setTurnoverrate(floatParse(rowData[10]));
+						priceHistory.setVoturnover(longParse(rowData[11]));
+						priceHistory.setVaturnover(doubleParse(rowData[12]));
+						mapper.insert(priceHistory);
+					}catch(NumberFormatException e) {
+						System.out.println("Date is : " + rowData[0] +" Stock is : "+ removeQuoteForStockCode(rowData[1]));
+						e.printStackTrace();
+					}catch(Exception e) {
+						System.out.println("Date is : " + rowData[0] +" Stock is : "+ removeQuoteForStockCode(rowData[1]));
+						e.printStackTrace();
+					}
 				}
-			}else {
-				reader.close();
 			}
+			reader.close();
 		}
+
 	}
 	
 	private String removeQuoteForStockCode(String rowString) {

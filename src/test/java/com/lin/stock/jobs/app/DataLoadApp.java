@@ -1,5 +1,6 @@
 package com.lin.stock.jobs.app;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 
@@ -50,6 +51,12 @@ public class DataLoadApp {
 	@Test
 	@Rollback(false)
 	public void loadFile2DataBaseTest() throws IOException {
-		job.loadFile2DataBase(FileConstant.CSVFILE_PATH+"600050"+FileConstant.CSV_FILE_SUFFIX);
+		job.loadFile2DataBase(FileConstant.CSVFILE_PATH+"300739"+FileConstant.CSV_FILE_SUFFIX);
+	}
+	
+	@Test
+	@Rollback(false)
+	public void loadAllFiles2Database() throws IOException {
+		job.fullLoadFromFile();
 	}
 }
