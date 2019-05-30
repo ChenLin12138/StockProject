@@ -97,6 +97,23 @@ CREATE TABLE `PRICE_HISTORY` (
   PRIMARY KEY (`pk`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+
+CREATE TABLE `PRICE_HISTORY_MONTH` (
+  `pk` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `CODE` char(6) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `DATE` char(8) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `TCLOSE` float NOT NULL,
+  `HIGH` float NOT NULL,
+  `LOW` float NOT NULL,
+  `TOPEN` float NOT NULL,
+  `CHG` float NOT NULL,
+  `PCHG` float NOT NULL,
+  `TURNOVERRATE` float NOT NULL,
+  `VOTURNOVER` bigint(20) unsigned NOT NULL,
+  `VATURNOVER` double NOT NULL,
+  PRIMARY KEY (`pk`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 ```
 
 ## 那些不存在的股票代码
@@ -127,3 +144,12 @@ java代码
 创业板文件和数据都有
 这个异常因为涨跌幅和涨跌额，换手率为None导致，删除改股票代码重
 300739只有两条写入数据库,很多数据都只写入了两条
+
+
+000012
+000014
+000049
+000538
+000553
+600651
+600652
