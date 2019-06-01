@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
@@ -35,7 +36,7 @@ public class PriceHistoryMapperTest {
 	public void shouldReturnAPriceHistory() {
 		PriceHistory history = new PriceHistory();
 		
-		history.setPk(1l);
+		history.setPk(1000000000l);
 		history.setChg(1f);
 		history.setCode("600030");
 		history.setDate("19900101");
@@ -47,12 +48,33 @@ public class PriceHistoryMapperTest {
 		history.setTurnoverrate(1f);
 		history.setVaturnover(1d);
 		history.setVoturnover(1l);
-		mapper.insert(history);
-		
+		mapper.insert(history);	
 		PriceHistory result = new PriceHistory();
-		result.setPk(1l);
-		result = mapper.selectById(result);
-		
+		result.setPk(1000000000l);
+		result = mapper.selectById(result);	
 		assertTrue(result.equals(history));
 	}
+	
+	@Test
+	public void shouldBeTrueWhenSelectByStockCodeAndDate() {
+		PriceHistory history = new PriceHistory();
+		history.setDate("20091210");
+		history.setCode("600001");
+		PriceHistory result = mapper.selectByStockCodeAndDate(history);
+		assertTrue("600001".equals(result.getCode()));
+		assertTrue("20091210".equals(result.getDate()));
+		assertTrue(44208092l == result.getVoturnover());
+	}
+	
+	@Test
+	public void shouldBeNullWhenSelectByStockCodeAndDateIs19800101() {
+		PriceHistory history = new PriceHistory();
+		history.setDate("19800101");
+		history.setCode("600001");
+		PriceHistory result = mapper.selectByStockCodeAndDate(history);	
+		Assert.assertNull(result);
+	}
+	
+	
+	
 }

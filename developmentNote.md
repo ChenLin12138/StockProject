@@ -115,6 +115,18 @@ CREATE TABLE `PRICE_HISTORY_MONTH` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 ```
+### 建立索引
+PRICE_HISTORY是一个拥有900万条数据的表。
+我们做一个这样的查询需要8.343秒的时间，我们想做查询优化。我的目标是做3星索引，意味着查询和返回数据都能在索引上完成。那么需要了解的是需求是什么，我需要返回什么样的字段。
+添加索引后大约查询只需要1-2毫秒
+```sql
+SELECT * FROM stock.PRICE_HISTORY WHERE CODE = '600001'
+AND DATE = '20091210'
+```
+创建索引的语句
+```sql
+CREATE UNIQUE INDEX PRICE_HISTORY_CODE_IDX USING BTREE ON stock.PRICE_HISTORY (CODE,`DATE`,TCLOSE,TOPEN);
+```
 
 ## 那些不存在的股票代码
 /Users/zdm/eclipse-workspace/StockProject/csvfiles/000614.csv: 108
@@ -138,18 +150,3 @@ java代码
 
 
 ## 一些问题
-文件下载到000913，但是都没写数据库，前面股票都需要重写数据库
-从000914-998文件和数据都有
-中小板文件和数据都有
-创业板文件和数据都有
-这个异常因为涨跌幅和涨跌额，换手率为None导致，删除改股票代码重
-300739只有两条写入数据库,很多数据都只写入了两条
-
-
-000012
-000014
-000049
-000538
-000553
-600651
-600652

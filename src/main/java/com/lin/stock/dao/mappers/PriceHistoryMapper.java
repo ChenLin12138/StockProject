@@ -19,4 +19,10 @@ public interface PriceHistoryMapper {
 	+" where pk = #{pk}")
 	public PriceHistory selectById(PriceHistory priceHistory);
 	
+	@Select("select pk, CODE,DATE, TCLOSE, HIGH, LOW, TOPEN, CHG, PCHG, TURNOVERRATE, VOTURNOVER, VATURNOVER"
+	+ " from PRICE_HISTORY"
+	+ " where CODE = #{code}"
+	+ " and DATE = #{date}"		)
+	public PriceHistory selectByStockCodeAndDate(PriceHistory priceHistory);
+	
 }
