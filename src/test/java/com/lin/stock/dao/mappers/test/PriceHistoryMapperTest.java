@@ -2,7 +2,7 @@ package com.lin.stock.dao.mappers.test;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.Date;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -75,6 +74,15 @@ public class PriceHistoryMapperTest {
 		Assert.assertNull(result);
 	}
 	
+	@Test
+	public void shouldReturn22RecordsWhenStockCode600001Between20091101And20091201() {
+		List<PriceHistory> results = mapper.selectByStockCodeAndDateRange("600001", "20091101", "20091201");
+		Assert.assertTrue(22==results.size());
+	}
 	
-	
+	@Test
+	public void should0RecordsWhenStockCode600001Between20100101And2010115() {
+		List<PriceHistory> results = mapper.selectByStockCodeAndDateRange("600001", "20100101", "2010115");
+		Assert.assertTrue(0==results.size());
+	}
 }

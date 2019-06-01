@@ -11,6 +11,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.lin.stock.config.DataSourceConfig;
 import com.lin.stock.config.MybatisMapperConfig;
+import com.lin.stock.model.PriceHistory;
+import com.lin.stock.service.PriceHistoryService;
 
 /**
  * @author Chen Lin
@@ -24,14 +26,23 @@ import com.lin.stock.config.MybatisMapperConfig;
 @ComponentScan(value="com.lin.stock.*")
 public class DateRangeAnalyser {
 
-//	@Autowired
-//	private Service service;
-//	
+	@Autowired
+	private PriceHistoryService service;
+	
 	
 	@Test
 	public void getReportBaseOnDateRange() {
 		
+		PriceHistory history = new PriceHistory();
 		
+		for() {
+			
+		}
+		
+		for() {
+			service.getStockPriceChangeByDateRange(stockCode, beginDate, endDate)
+		}
+	
 		
 	}
 	

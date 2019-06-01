@@ -115,6 +115,12 @@ CREATE TABLE `PRICE_HISTORY_MONTH` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 ```
+
+股票表，暂时这样用着吧
+```sql
+CREATE TABLE stock.stock SELECT DISTINCT CODE FROM stock.PRICE_HISTORY group BY CODE
+```
+
 ### 建立索引
 PRICE_HISTORY是一个拥有900万条数据的表。
 我们做一个这样的查询需要8.343秒的时间，我们想做查询优化。我的目标是做3星索引，意味着查询和返回数据都能在索引上完成。那么需要了解的是需求是什么，我需要返回什么样的字段。
