@@ -156,3 +156,53 @@ java代码
 
 
 ## 一些问题
+Stock Code is : 000009 Count is 11 in totoal 27
+Stock Code is : 000010 Count is 11 in totoal 20
+Stock Code is : 000014 Count is 14 in totoal 27
+Stock Code is : 000022 Count is 11 in totoal 25
+Stock Code is : 000027 Count is 11 in totoal 25
+Stock Code is : 000028 Count is 11 in totoal 26
+Stock Code is : 000035 Count is 11 in totoal 21
+Stock Code is : 000040 Count is 11 in totoal 24
+Stock Code is : 000042 Count is 12 in totoal 24
+Stock Code is : 000046 Count is 12 in totoal 24
+Stock Code is : 000049 Count is 11 in totoal 24
+Stock Code is : 000056 Count is 11 in totoal 22
+Stock Code is : 000063 Count is 11 in totoal 21
+Stock Code is : 000418 Count is 11 in totoal 22
+Stock Code is : 000505 Count is 12 in totoal 23
+Stock Code is : 000509 Count is 11 in totoal 25
+Stock Code is : 000510 Count is 11 in totoal 26
+Stock Code is : 000514 Count is 12 in totoal 25
+Stock Code is : 000519 Count is 15 in totoal 25
+Stock Code is : 000531 Count is 15 in totoal 25
+Stock Code is : 000533 Count is 11 in totoal 25
+Stock Code is : 000539 Count is 12 in totoal 25
+Stock Code is : 000543 Count is 13 in totoal 25
+Stock Code is : 000545 Count is 12 in totoal 21
+Stock Code is : 000546 Count is 12 in totoal 23
+Stock Code is : 000550 Count is 13 in totoal 25
+Stock Code is : 000555 Count is 13 in totoal 22
+Stock Code is : 000559 Count is 11 in totoal 25
+Stock Code is : 000565 Count is 11 in totoal 24
+Stock Code is : 000567 Count is 14 in totoal 25
+Stock Code is : 000568 Count is 12 in totoal 25
+Stock Code is : 000570 Count is 12 in totoal 24
+Stock Code is : 000589 Count is 11 in totoal 23
+Stock Code is : 000596 Count is 13 in totoal 21
+Stock Code is : 000598 Count is 12 in totoal 23
+Stock Code is : 000599 Count is 11 in totoal 23
+Stock Code is : 000601 Count is 11 in totoal 22
+Stock Code is : 000705 Count is 11 in totoal 22
+Stock Code is : 000712 Count is 12 in totoal 22
+Stock Code is : 000736 Count is 12 in totoal 20
+Stock Code is : 000738 Count is 11 in totoal 22
+Stock Code is : 000752 Count is 11 in totoal 22
+Stock Code is : 000761 Count is 11 in totoal 21
+Stock Code is : 000792 Count is 11 in totoal 21
+Stock Code is : 000799 Count is 12 in totoal 21
+Stock Code is : 000812 Count is 12 in totoal 21
+Stock Code is : 000858 Count is 14 in totoal 21
+Stock Code is : 000928 Count is 12 in totoal 19
+Stock Code is : 000951 Count is 11 in totoal 18
+

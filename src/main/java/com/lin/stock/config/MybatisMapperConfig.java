@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.lin.stock.dao.mappers.PriceHistoryMapper;
+import com.lin.stock.dao.mappers.StockMapper;
 
 /**
  * @author Chen Lin
@@ -34,11 +35,18 @@ public class MybatisMapperConfig {
 		sessionTemplate.getConfiguration().addMappers("com.lin.stock.dao.mappers");
 		return sessionTemplate;
 	}
-
+	
 	@Bean
 	public PriceHistoryMapper priceHistoryMapper() throws Exception {
 
 		return sqlSessionTemplate().getMapper(PriceHistoryMapper.class);
+
+	}
+	
+	@Bean
+	public StockMapper stockMapper() throws Exception {
+
+		return sqlSessionTemplate().getMapper(StockMapper.class);
 
 	}
 }

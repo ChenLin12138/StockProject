@@ -22,11 +22,8 @@ import com.lin.stock.model.PriceHistory;
  * @author Chen Lin
  * @date 2019-05-18
  */
-@RunWith(SpringRunner.class)
-@MybatisTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ContextConfiguration(classes = { DataSourceConfig.class, MybatisMapperConfig.class })
-public class PriceHistoryMapperTest {
+
+public class PriceHistoryMapperTest extends BaseMybatisMappterTest{
 
 	@Autowired
 	PriceHistoryMapper mapper;
