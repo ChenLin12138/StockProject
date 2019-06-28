@@ -1,5 +1,6 @@
 package com.lin.stock.dao.mappers.test;
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -18,6 +19,6 @@ import com.lin.stock.config.MybatisMapperConfig;
 @MybatisTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ContextConfiguration(classes = { DataSourceConfig.class, MybatisMapperConfig.class })
-public class BaseMybatisMappterTest {
+public abstract class BaseMybatisMappterTest {
 
 }
