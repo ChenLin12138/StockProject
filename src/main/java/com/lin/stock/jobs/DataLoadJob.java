@@ -44,9 +44,11 @@ public class DataLoadJob {
 		fullDownloadFor1Market(StockMarket.SHENZHENG.getValue());
 		fullDownloadFor1Market(StockMarket.SMALL.getValue());
 		fullDownloadFor1Market(StockMarket.SECOND.getValue());
+		loadFiles2Database();
+		
 	}
 	
-	public void fullLoadFromFile() throws IOException{
+	public void loadFiles2Database() throws IOException{
 		
 		for(int stockCode = 1 ; stockCode < 999; stockCode++) {	
 			loadFile2DataBase(getOutFileName(StockMarket.SHANGHAI1.getValue(),stockCode));
@@ -83,9 +85,11 @@ public class DataLoadJob {
 					.tclose().high().low().topen().lclose().chg()
 					.pchg().turnover().voturnover().vaturnover()
 					.build();		
-			if(FileDownload.downloadWithNIO(url.getURL(),getOutFileName(marketCode,stockCode))) {
-				loadFile2DataBase(getOutFileName(marketCode,stockCode));
-			}
+			FileDownload.downloadWithNIO(url.getURL(),getOutFileName(marketCode,stockCode));
+			
+//			if(FileDownload.downloadWithNIO(url.getURL(),getOutFileName(marketCode,stockCode))) {
+//				loadFile2DataBase(getOutFileName(marketCode,stockCode));
+//			}
 		}		
 	}
 	

@@ -57,6 +57,6 @@ public class DataLoadApp {
 	@Test
 	@Rollback(false)
 	public void loadAllFiles2Database() throws IOException {
-		job.fullLoadFromFile();
+		job.loadFiles2Database();
 	}
 }

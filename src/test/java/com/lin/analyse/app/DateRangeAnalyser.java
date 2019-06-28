@@ -53,8 +53,8 @@ public class DateRangeAnalyser {
 			int counter = 0;
 			int sum = 0;
 			for(int year = 1990; year < 2019; year++) {
-				String beginDate = String.valueOf(year)+"0531";
-				String endDate = String.valueOf(year)+"0630";
+				String beginDate = String.valueOf(year)+"0630";
+				String endDate = String.valueOf(year)+"0731";
 				PriceChange priceChange = priceHistoryService.getStockPriceChangeByDateRange(stock.getCode(), beginDate, endDate);
 				
 				if(null != priceChange) {
