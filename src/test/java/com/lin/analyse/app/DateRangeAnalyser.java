@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.StopWatch;
 
 import com.lin.stock.config.DataSourceConfig;
 import com.lin.stock.config.MybatisMapperConfig;
@@ -30,6 +31,11 @@ import com.lin.stock.service.StockService;
 @ContextConfiguration(classes = { DataSourceConfig.class, MybatisMapperConfig.class })
 @ComponentScan(value="com.lin.stock.*")
 public class DateRangeAnalyser {
+	
+	private int countThreshold = 10;
+	private float rateThreshold = 0.6f;
+	private String beginDateOfMonth = "0731";
+	private String endDateOfMonth = "0831";
 
 	@Autowired
 	private PriceHistoryService priceHistoryService;
@@ -43,39 +49,49 @@ public class DateRangeAnalyser {
 	@Test
 	public void getReportBaseOnDateRange() {
 		
+		StopWatch sw = new StopWatch();
+		sw.start("PriceHistoryService.getReportBaseOnDateRange");
 		List<Stock> stocks = stockService.getAllStock();
-		List<String> yearRecorder = new ArrayList<String>();
-		
-		
+		List<PriceChange> priceChanges = new ArrayList<PriceChange>(50);
 		
 		for(Stock stock : stocks) {
-			
-			int counter = 0;
-			int sum = 0;
+			priceChanges.clear();
+			float counter = 0.f;
+			float sum = 0.f;
 			for(int year = 1990; year < 2019; year++) {
-				String beginDate = String.valueOf(year)+"0630";
-				String endDate = String.valueOf(year)+"0731";
+				String beginDate = String.valueOf(year)+beginDateOfMonth;
+				String endDate = String.valueOf(year)+endDateOfMonth;
 				PriceChange priceChange = priceHistoryService.getStockPriceChangeByDateRange(stock.getCode(), beginDate, endDate);
 				
 				if(null != priceChange) {
 					if (priceChange.getChg() > 0 ) {
 						counter ++;
-					}else {
-						yearRecorder.add(priceChange.getBeginDate());
-					}
+					} 
+					priceChanges.add(priceChange);	
 					sum ++;
 				}
 			}
 			
-			if(counter > 10) {
-				System.out.println(stock.getCode()+","+counter+","+sum+","+new Float(counter)/new Float(sum));
+			if(counter > countThreshold && counter/sum > rateThreshold) {
+		
+				float gain = 0.f;
+				float loss = 0.f;
+				
+				for(PriceChange priceChange : priceChanges) {
+		
+					if(priceChange.getPchg() >= 0.f) {
+						gain += priceChange.getPchg();
+					}else {
+						loss += priceChange.getPchg();
+					}
+				}
+				System.out.println(stock.getCode()+","+counter+","+sum+","+counter/sum+","+gain * 100/sum+"%,"+ loss * 100/sum+"%");
 			}
 		}
 		
-		
-		
-		
-		
+		sw.stop();
+        System.out.println(sw.prettyPrint());
+	
 	}
 	
 }

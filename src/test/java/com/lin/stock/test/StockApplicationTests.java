@@ -1,4 +1,4 @@
-package com.lin.stock;
+package com.lin.stock.test;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
