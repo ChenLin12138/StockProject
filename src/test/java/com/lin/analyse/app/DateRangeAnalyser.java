@@ -36,15 +36,14 @@ public class DateRangeAnalyser {
 	private float rateThreshold = 0.6f;
 	private String beginDateOfMonth = "0731";
 	private String endDateOfMonth = "0831";
+	private int startYear = 1990;
+	private int endYear = 2019;
 
 	@Autowired
 	private PriceHistoryService priceHistoryService;
 	
-	
 	@Autowired
 	private StockService stockService;
-	
-	
 	
 	@Test
 	public void getReportBaseOnDateRange() {
@@ -58,7 +57,7 @@ public class DateRangeAnalyser {
 			priceChanges.clear();
 			float counter = 0.f;
 			float sum = 0.f;
-			for(int year = 1990; year < 2019; year++) {
+			for(int year = startYear; year < endYear; year++) {
 				String beginDate = String.valueOf(year)+beginDateOfMonth;
 				String endDate = String.valueOf(year)+endDateOfMonth;
 				PriceChange priceChange = priceHistoryService.getStockPriceChangeByDateRange(stock.getCode(), beginDate, endDate);
