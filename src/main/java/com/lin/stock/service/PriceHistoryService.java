@@ -35,6 +35,10 @@ public class PriceHistoryService {
 		return mapper.selectByStockCodeAndDateRange(stockCode, beginDate, endDate);
 	}
 	
+	public List<PriceHistory> getStockPriceByDateRange(String beginDate, String endDate){
+		return mapper.selectByDateRange(beginDate, endDate);
+	} 
+	
 	public PriceChange getStockPriceChangeByDateRange (String stockCode, String beginDate, String endDate) {
 		List<PriceHistory> priceHistories = mapper.selectByStockCodeAndDateRange(stockCode, beginDate, endDate);
 		if(0 != priceHistories.size()) {
@@ -44,7 +48,8 @@ public class PriceHistoryService {
 		return null;
 	} 
 	
-	private PriceChange caculatePriceChange(PriceHistory begin, PriceHistory end) {
+	//暂时打开这个方法让外面的类调用
+	public PriceChange caculatePriceChange(PriceHistory begin, PriceHistory end) {
 		
 		PriceChange priceChange =  new PriceChange();
 		//其实这里应该减去startDate前一天的收盘价，我就偷懒了

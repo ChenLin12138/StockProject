@@ -133,6 +133,10 @@ AND DATE = '20091210'
 ```sql
 CREATE UNIQUE INDEX PRICE_HISTORY_CODE_IDX USING BTREE ON stock.PRICE_HISTORY (CODE,`DATE`,TCLOSE,TOPEN);
 ```
+```sql
+CREATE INDEX PRICE_HISTORY_DATE_IDX USING BTREE ON stock.PRICE_HISTORY (`DATE`);
+```
+
 
 ## 那些不存在的股票代码
 /Users/zdm/eclipse-workspace/StockProject/csvfiles/000614.csv: 108
@@ -155,6 +159,7 @@ java代码
 解决：和数据库时区设置有关系，直接修改成字符类型，不用Date类型了。
 
 ## 查询优化
+1.优化
 优化前，扫描7月上涨的股票需要用时大约220秒
 ```
 StopWatch '': running time (millis) = 227736
@@ -163,6 +168,14 @@ ms     %     Task name
 -----------------------------------------
 227736  100%  PriceHistoryService.getReportBaseOnDateRange
 ```
+优化前，扫描7月上涨的股票需要用时大约60秒
+```
+-----------------------------------------
+ms     %     Task name
+-----------------------------------------
+60992  100%  PriceHistoryService.getReportBaseOnDateRangeOpt
+```
+优化思路：优化前大约有3000 * 30 次的最坏IO操作。 优化采用一次IO读取所有股票的当年数据。IO次数降低为30次，从而降低查询时间
 
 ## 一些问题
 
