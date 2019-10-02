@@ -22,6 +22,12 @@ public interface PriceHistoryMapper {
 	public PriceHistory selectById(PriceHistory priceHistory);
 	
 	@Select("select pk, CODE,DATE, TCLOSE, HIGH, LOW, TOPEN, CHG, PCHG, TURNOVERRATE, VOTURNOVER, VATURNOVER"
+			+" from PRICE_HISTORY"
+			+" where CODE = #{stockCode}"
+			+" order by date limit 1")
+	public PriceHistory selectFirstBusinessInfo(String stockCode);
+	
+	@Select("select pk, CODE,DATE, TCLOSE, HIGH, LOW, TOPEN, CHG, PCHG, TURNOVERRATE, VOTURNOVER, VATURNOVER"
 	+ " from PRICE_HISTORY"
 	+ " where CODE = #{code}"
 	+ " and DATE = #{date}")
@@ -42,5 +48,4 @@ public interface PriceHistoryMapper {
 			+ " order by CODE, DATE")
 	public List<PriceHistory> selectByDateRange(String beginDate, String endDate);
 	
-
 }

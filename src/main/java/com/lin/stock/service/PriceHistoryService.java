@@ -21,14 +21,16 @@ public class PriceHistoryService {
 	@Autowired
 	private PriceHistoryMapper mapper;
 	
-	public PriceHistory getPriceHistory(String stockCode, String date) {
-		
+	
+	//检查指定股票指定日期是否为交易日
+	//若是交易日返回信息
+	//若不是交易日返回null
+	public PriceHistory getPriceHistoryWithStockCodeAndDate(String stockCode, String date) {
 		PriceHistory priceHistory = new PriceHistory();
 		priceHistory.setCode(stockCode);
 		priceHistory.setDate(date);
 		priceHistory = mapper.selectByStockCodeAndDate(priceHistory);	
 		return (null == priceHistory) ? null : priceHistory;
-		
 	}
 	
 	public List<PriceHistory> getStockPriceByDateRange(String stockCode, String beginDate, String endDate){
@@ -39,6 +41,16 @@ public class PriceHistoryService {
 		return mapper.selectByDateRange(beginDate, endDate);
 	} 
 	
+	//查询该股票的第一个交易日信息
+	public PriceHistory getFirstBusinessDateInfoByStockCode(String stockCode) {
+		return mapper.selectFirstBusinessInfo(stockCode);
+	}
+	
+	//查询该股票的第一个交易日
+	public String getFirstBusinessDateByStockCode(String stockCode) {
+		return getFirstBusinessDateInfoByStockCode(stockCode).getDate();
+	}
+	
 	public PriceChange getStockPriceChangeByDateRange (String stockCode, String beginDate, String endDate) {
 		List<PriceHistory> priceHistories = mapper.selectByStockCodeAndDateRange(stockCode, beginDate, endDate);
 		if(0 != priceHistories.size()) {
@@ -47,7 +59,7 @@ public class PriceHistoryService {
 		
 		return null;
 	} 
-	
+		
 	//暂时打开这个方法让外面的类调用
 	public PriceChange caculatePriceChange(PriceHistory begin, PriceHistory end) {
 		
@@ -62,10 +74,12 @@ public class PriceHistoryService {
 		return priceChange;
 	}
 	
+
+	
 	//这个方法可以和下面的方法通过lambda表达式合并成为一个方法。
 	private String getActualFromDate(String stockCode, String date) {
 		
-		while(null == getPriceHistory(stockCode, date)) {
+		while(null == getPriceHistoryWithStockCodeAndDate(stockCode, date)) {
 			date = DateUtil.getNextDate(date);
 		}
 		
@@ -75,7 +89,7 @@ public class PriceHistoryService {
 	//这个方法可以和上面的方法通过lambda表达式合并成为一个方法。
 	private String getActualEndDate(String stockCode, String date) {
 		
-		while(null == getPriceHistory(stockCode, date)) {
+		while(null == getPriceHistoryWithStockCodeAndDate(stockCode, date)) {
 			date = DateUtil.getPrevDate(date);
 		}
 		

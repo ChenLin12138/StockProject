@@ -33,19 +33,19 @@ public class PriceHistoryServiceTest {
 	
 	@Test
 	public void shouldReturnNullWhenDateIs19890101() {
-		PriceHistory history =service.getPriceHistory("600001", "19890101");
+		PriceHistory history =service.getPriceHistoryWithStockCodeAndDate("600001", "19890101");
 		Assert.assertNull(history);
 	}
 	
 	@Test
 	public void shouldReturnNullWhenStockCodeIs000000() {
-		PriceHistory history =service.getPriceHistory("000000", "20091210");
+		PriceHistory history =service.getPriceHistoryWithStockCodeAndDate("000000", "20091210");
 		Assert.assertNull(history);
 	}
 	
 	@Test
 	public void shouldTrueWhenStockCodeIs600001DateIs20091210() {
-		PriceHistory history =service.getPriceHistory("600001", "20091210");
+		PriceHistory history =service.getPriceHistoryWithStockCodeAndDate("600001", "20091210");
 		Assert.assertNotNull(history);
 	}
 	
@@ -59,4 +59,9 @@ public class PriceHistoryServiceTest {
 		Assert.assertTrue("20091201".compareTo(change.getEndDate()) >= 0);
 	}
 	
+	@Test
+	public void shouldReturn19980122AsDate() {
+		Assert.assertTrue("19980122".equals(service.getFirstBusinessDateInfoByStockCode("600001").getDate()));
+		Assert.assertTrue("19980122".equals(service.getFirstBusinessDateByStockCode("600001")));
+	}
 }

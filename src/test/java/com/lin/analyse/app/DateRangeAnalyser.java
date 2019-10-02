@@ -38,8 +38,8 @@ public class DateRangeAnalyser {
 	
 	private int countThreshold = 10;
 	private float rateThreshold = 0.6f;
-	private String beginDateOfMonth = "0731";
-	private String endDateOfMonth = "0831";
+	private String beginDateOfMonth = "1001";
+	private String endDateOfMonth = "1030";
 	private int startYear = 1990;
 	private int endYear = 2019;
 

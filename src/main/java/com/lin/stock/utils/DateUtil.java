@@ -1,10 +1,7 @@
 package com.lin.stock.utils;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * @author Chen Lin
@@ -41,6 +38,7 @@ public class DateUtil {
 	}
 
 
+	//获取前一天的日期
 	public static String getPrevDate(int year, int month, int date) {
 		
 		Calendar ca = Calendar.getInstance();
@@ -49,6 +47,7 @@ public class DateUtil {
 		return parseCalendar2String(ca);
 	}
 	
+	//获取前一天的日期
 	public static String getPrevDate(String date) {
 		
 		Calendar ca = Calendar.getInstance();
