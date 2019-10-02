@@ -5,22 +5,22 @@ package com.lin.stock.exceptions;
  * @date 2019-10-02
  */
 
-public class InSufficientDateException extends Exception {
+public class InValidDateException extends Exception {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -178388106080726627L;
 	private int value;
-    public InSufficientDateException() {
+    public InValidDateException() {
         super();
     }
-    public InSufficientDateException(String msg,int value) {
+    public InValidDateException(String msg,int value) {
         super(msg);
         this.value=value;
     }
     
-    public InSufficientDateException(String msg) {
+    public InValidDateException(String msg) {
         super(msg);
     }
     
