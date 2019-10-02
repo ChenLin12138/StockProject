@@ -28,7 +28,7 @@ public class MovingAverageServiceTest extends BaseServiceTest{
 	
 	
 	@Test
-	public void shouldInValidDateExceptionWhenDateIs19890210CodeIs600001AsMA5() throws InValidDateException, ParseException {
+	public void shouldCatchInValidDateExceptionWhenDateIs19890210CodeIs600001AsMA5() throws InValidDateException, ParseException {
 		expectedEx.expect(InValidDateException.class);
 		service.getAverage("19890210", 5, "600001");
 		expectedEx.expectMessage("Invalid BusinessDate!");
@@ -36,9 +36,21 @@ public class MovingAverageServiceTest extends BaseServiceTest{
 	
 	
 	@Test
-	public void shouldInValidDateExceptionWhenDateIs19980210CodeIs600001AsMA5() throws InValidDateException, ParseException {
+	public void shouldCatchInValidDateExceptionWhenDateIs19980210CodeIs600001AsMA5() throws InValidDateException, ParseException {
 		expectedEx.expect(InValidDateException.class);
 		service.getAverage("19980210", 5, "600001");
 		expectedEx.expectMessage("Reach the 1st business date!");
 	}
+	
+	@Test
+	public void shouldFalseTrueWhenDateIs19980210CodeIs600001AsMA5() throws InValidDateException, ParseException {
+		Assert.assertFalse(service.isMAUp("19980213", 5, "600001"));
+	}
+	
+	@Test
+	public void shouldReturnTrueWhenDateIs19980210CodeIs600001AsMA5() throws InValidDateException, ParseException {
+		Assert.assertTrue(service.isMADown("19980213", 5, "600001"));
+	}
+	
+	
 }
