@@ -12,6 +12,15 @@ public class Trade {
 	private String buyDate;
 	private String sellDate;
 	private String status;
+	private String stockCode;
+
+	public String getStockCode() {
+		return stockCode;
+	}
+
+	public void setStockCode(String stockCode) {
+		this.stockCode = stockCode;
+	}
 
 	public String getStatus() {
 		return status;
@@ -64,7 +73,7 @@ public class Trade {
 	@Override
 	public String toString() {
 		
-		return "BuyDate:"+this.buyDate+"SellDate:"+this.sellDate+"BuyPrice:"+this.buyPrice+"SellPrice"+this.sellPrice+"Chg:"+getChg()+"Rate:"+getRate();
+		return "StockCode:"+this.stockCode+"BuyDate:"+this.buyDate+"SellDate:"+this.sellDate+"BuyPrice:"+this.buyPrice+"SellPrice"+this.sellPrice+"Chg:"+getChg()+"Rate:"+getRate();
 		
 	}
 

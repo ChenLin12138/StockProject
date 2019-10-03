@@ -1,6 +1,5 @@
 package com.lin.analyse.app;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -60,7 +59,7 @@ public class TradeStrategy1 {
 		for(String stockCode : stockCodes) {
 			clearTrade();
 			List<String> tradeDates = priceHistoryService.getAllBusinessDateByStockCode(stockCode);
-			for(String date : tradeDates) {
+			for(String date : tradeDates.subList(30, tradeDates.size())) {
 				
 				try {
 					if("E".equals(trade.getStatus()) && maCorssService.isMA5CrossMA30Up(stockCode, date) && turnOverService.isIncreaseTimesWithMedian(stockCode, date, 10, 2, 3)) {
@@ -69,6 +68,7 @@ public class TradeStrategy1 {
 						trade.setBuyDate(nextBusinessDate);
 						trade.setStatus("H");
 						trade.setBuyPrice(nextDatePriceHistory.getTopen());
+						trade.setStockCode(stockCode);
 					}else if ("H".equals(trade.getStatus()) && maCorssService.isMA5CorssMA30Down(stockCode, date)){
 						String nextBusinessDate = businessDateService.getNextBusinessDate(stockCode, date);
 						PriceHistory nextDatePriceHistory = priceHistoryService.getPriceHistoryWithStockCodeAndDate(stockCode, nextBusinessDate);
@@ -92,6 +92,7 @@ public class TradeStrategy1 {
 		this.trade.setSellDate("");
 		this.trade.setSellPrice(0);
 		this.trade.setStatus("E");
+		this.trade.setStockCode("");
 		
 		
 	}
