@@ -50,7 +50,6 @@ public class MovingAverageServiceTest extends BaseServiceTest{
 	@Test
 	public void shouldReturnTrueWhenDateIs19980210CodeIs600001AsMA5() throws InValidDateException, ParseException {
 		Assert.assertTrue(service.isMADown("19980213", 5, "600001"));
-	}
-	
+	}	
 	
 }

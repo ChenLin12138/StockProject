@@ -54,5 +54,4 @@ public class MovingAverageService {
 		PriceHistory priceHistory = priceHistoryService.getPriceHistoryWithStockCodeAndDate(stockCode, date);
 		return null == priceHistory ? false : true;
 	}
-	
 }

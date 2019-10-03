@@ -22,4 +22,8 @@ public class BusinessDateService {
 	public String getPreviousBusinessDate(String stockCode, String date) {
 		return service.getPreviousBusinessInfo(stockCode, date).getDate();
 	}
+	
+	public String getNextBusinessDate(String stockCode, String date) {
+		return service.getNextBusinessInfo(stockCode, date).getDate();
+	}
 }

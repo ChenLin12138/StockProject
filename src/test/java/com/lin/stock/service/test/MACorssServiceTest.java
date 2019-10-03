@@ -1,0 +1,39 @@
+package com.lin.stock.service.test;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.lin.stock.exceptions.InValidDateException;
+import com.lin.stock.service.MACorssService;
+
+/**
+ * @author Chen Lin
+ * @date 2019-10-03
+ */
+
+public class MACorssServiceTest extends BaseServiceTest{
+
+	@Autowired
+	MACorssService maCrossService;
+	
+	@Test
+	public void shouldReturnTrueWhen20190213Stock000783() throws InValidDateException {
+		Assert.assertTrue(maCrossService.isMA5CrossMA30Up("000783", "20190213"));
+	}
+	
+	@Test
+	public void shouldReturnTrueWhen20190212Stock000783() throws InValidDateException {
+		Assert.assertFalse(maCrossService.isMA5CrossMA30Up("000783", "20190212"));
+	}
+	
+	@Test
+	public void shouldReturnTrueWhen20190130Stock000783() throws InValidDateException {
+		Assert.assertTrue(maCrossService.isMA5CorssMA30Down("000783", "20190131"));
+	}
+	
+	@Test
+	public void shouldReturnTrueWhen20190129Stock000783() throws InValidDateException {
+		Assert.assertFalse(maCrossService.isMA5CorssMA30Down("000783", "20190130"));
+	}
+}

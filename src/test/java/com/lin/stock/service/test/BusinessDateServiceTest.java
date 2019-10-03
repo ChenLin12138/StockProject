@@ -20,4 +20,10 @@ public class BusinessDateServiceTest extends BaseServiceTest {
 	public void shouldReturn19980217AsBusinessDate() {
 		Assert.assertTrue("19980217".equals(service.getPreviousBusinessDate("600001", "19980218")));
 	}
+	
+	
+	@Test
+	public void shouldReturn19980227AsBusinessDate() {
+		Assert.assertTrue("19980302".equals(service.getNextBusinessDate("600001", "19980227")));
+	}
 }
