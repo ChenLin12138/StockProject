@@ -1,5 +1,7 @@
 package com.lin.stock.service.test;
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +52,45 @@ public class PriceHistoryServiceTest extends BaseServiceTest{
 	public void shouldReturn19980122AsDate() {
 		Assert.assertTrue("19980122".equals(service.getFirstBusinessDateInfoByStockCode("600001").getDate()));
 		Assert.assertTrue("19980122".equals(service.getFirstBusinessDateByStockCode("600001")));
+	}
+	
+	@Test
+	public void shouldReturn19980217AsDate() {
+		Assert.assertTrue("19980217".equals(service.getPreviousBusinessInfo("600001", "19980218").getDate()));
+	}
+	
+	@Test
+	public void shouldReturn19980217AsBeginDate() {
+		List<PriceHistory> results = service.getPreviousBusinessInfos("600001","19980218",5);
+		Assert.assertTrue("19980217".equals(results.get(0).getDate()));
+		Assert.assertTrue("19980216".equals(results.get(1).getDate()));
+		Assert.assertTrue("19980213".equals(results.get(2).getDate()));
+		Assert.assertTrue("19980212".equals(results.get(3).getDate()));
+		Assert.assertTrue("19980211".equals(results.get(4).getDate()));	
+	}
+	
+	@Test
+	public void shouldReturn19980218AsBeginDate() {
+		List<PriceHistory> results = service.getLastInfosByDate("600001","19980218",5);
+		Assert.assertTrue("19980218".equals(results.get(0).getDate()));
+		Assert.assertTrue("19980217".equals(results.get(1).getDate()));
+		Assert.assertTrue("19980216".equals(results.get(2).getDate()));
+		Assert.assertTrue("19980213".equals(results.get(3).getDate()));
+		Assert.assertTrue("19980212".equals(results.get(4).getDate()));	
+	}
+	
+	@Test
+	public void shouldReturn19980219AsDate() {
+		Assert.assertTrue("19980219".equals(service.getNextBusinessInfo("600001", "19980218").getDate()));
+	}
+	
+	@Test
+	public void shouldReturn19980219AsBeginDate() {
+		List<PriceHistory> results = service.getNextBusinessInfos("600001","19980218",5);
+		Assert.assertTrue("19980219".equals(results.get(0).getDate()));
+		Assert.assertTrue("19980220".equals(results.get(1).getDate()));
+		Assert.assertTrue("19980223".equals(results.get(2).getDate()));
+		Assert.assertTrue("19980224".equals(results.get(3).getDate()));
+		Assert.assertTrue("19980225".equals(results.get(4).getDate()));	
 	}
 }

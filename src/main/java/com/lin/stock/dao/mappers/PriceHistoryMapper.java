@@ -48,4 +48,30 @@ public interface PriceHistoryMapper {
 			+ " order by CODE, DATE")
 	public List<PriceHistory> selectByDateRange(String beginDate, String endDate);
 	
+	
+	@Select("select pk, CODE,DATE, TCLOSE, HIGH, LOW, TOPEN, CHG, PCHG, TURNOVERRATE, VOTURNOVER, VATURNOVER"
+			+" from PRICE_HISTORY"
+			+" where CODE = #{stockCode}"
+			+" and Date < #{date}"
+			+" order by date desc limit #{days}")
+	public List<PriceHistory> selectPreviousDatesInfo(String stockCode, String date, int days);
+	
+	
+	@Select("select pk, CODE,DATE, TCLOSE, HIGH, LOW, TOPEN, CHG, PCHG, TURNOVERRATE, VOTURNOVER, VATURNOVER"
+			+" from PRICE_HISTORY"
+			+" where CODE = #{stockCode}"
+			+" and Date > #{date}"
+			+" order by date limit #{days}")
+	public List<PriceHistory> selectNextDatesInfo(String stockCode, String date, int days);
+
+
+	@Select("select pk, CODE,DATE, TCLOSE, HIGH, LOW, TOPEN, CHG, PCHG, TURNOVERRATE, VOTURNOVER, VATURNOVER"
+			+" from PRICE_HISTORY"
+			+" where CODE = #{stockCode}"
+			+" and Date <= #{date}"
+			+" order by date desc limit #{days}")
+	public List<PriceHistory> selectLastInfoByDate(String stockCode, String date, int days);
+	
+	
+	
 }

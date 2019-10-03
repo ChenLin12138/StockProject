@@ -39,7 +39,7 @@ public class MovingAverageServiceTest extends BaseServiceTest{
 	public void shouldCatchInValidDateExceptionWhenDateIs19980210CodeIs600001AsMA5() throws InValidDateException, ParseException {
 		expectedEx.expect(InValidDateException.class);
 		service.getAverage("19980210", 5, "600001");
-		expectedEx.expectMessage("Reach the 1st business date!");
+		expectedEx.expectMessage("Invalid BusinessDate!");
 	}
 	
 	@Test

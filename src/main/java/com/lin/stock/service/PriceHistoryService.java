@@ -33,6 +33,28 @@ public class PriceHistoryService {
 		return (null == priceHistory) ? null : priceHistory;
 	}
 	
+	public PriceHistory getPreviousBusinessInfo(String stockCode, String date) {	
+		List<PriceHistory> result = mapper.selectPreviousDatesInfo(stockCode, date, 1);
+		return result.get(0);
+	}
+	
+	public List<PriceHistory> getLastInfosByDate(String stockCode, String date, int days) {	
+		return mapper.selectLastInfoByDate(stockCode, date, days);
+	}
+	
+	public List<PriceHistory> getPreviousBusinessInfos(String stockCode, String date, int days) {	
+		return mapper.selectPreviousDatesInfo(stockCode, date, days);
+	}
+	
+	public PriceHistory getNextBusinessInfo(String stockCode, String date) {	
+		List<PriceHistory> result = mapper.selectNextDatesInfo(stockCode, date, 1);
+		return result.get(0);
+	}
+	
+	public List<PriceHistory> getNextBusinessInfos(String stockCode, String date, int days) {	
+		return mapper.selectNextDatesInfo(stockCode, date, days);
+	}
+	
 	public List<PriceHistory> getStockPriceByDateRange(String stockCode, String beginDate, String endDate){
 		return mapper.selectByStockCodeAndDateRange(stockCode, beginDate, endDate);
 	}
