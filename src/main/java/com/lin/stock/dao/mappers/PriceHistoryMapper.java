@@ -73,5 +73,10 @@ public interface PriceHistoryMapper {
 	public List<PriceHistory> selectLastInfoByDate(String stockCode, String date, int days);
 	
 	
+	@Select("select DISTINCT code from PRICE_HISTORY")
+	public List<String> selectAllCodes();
 	
+	@Select("select date from PRICE_HISTORY"
+			+ " WHERE CODE = #{stockCode}")
+	public List<String> selectAllDatesByStockCode(String stockCode);
 }

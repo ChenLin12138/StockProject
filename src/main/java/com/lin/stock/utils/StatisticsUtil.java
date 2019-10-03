@@ -17,6 +17,14 @@ public class StatisticsUtil {
 	    result = list.get((size-1)/2);
 		return result;
 	}
+	
+	public static Long getLongMedian(List<Long> list) {
+		long result  = 0;
+	    Collections.sort(list);
+	    int size = list.size();
+	    result = list.get((size-1)/2);
+		return result;
+	}
 
 	public static float getFloatAverageAround2(List<Float> list) {
 		Double result =  list.stream().mapToDouble(Float::doubleValue).average().getAsDouble();

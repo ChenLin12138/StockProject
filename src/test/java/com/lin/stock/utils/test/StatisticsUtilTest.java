@@ -28,7 +28,7 @@ public class StatisticsUtilTest {
 	}
 	
 	@Test
-	public void should_return_57_as_median(){	
+	public void should_return_57_as_intMedian(){	
 		List<Integer> list = new ArrayList<Integer>();
 		list.add(12);
 		list.add(71);
@@ -37,6 +37,30 @@ public class StatisticsUtilTest {
 		list.add(10000);
 		list.add(88);	
 		assertTrue(57==StatisticsUtil.getIntMedian(list));
+	}
+	
+	
+	@Test
+	public void should_return_56_as_Longmedian(){	
+		List<Long> list = new ArrayList<Long>();
+		list.add(12L);
+		list.add(56L);
+		list.add(23L);
+		list.add(10000L);
+		list.add(88L);	
+		assertTrue(56==StatisticsUtil.getLongMedian(list));
+	}
+	
+	@Test
+	public void should_return_57_as_longMedian(){	
+		List<Long> list = new ArrayList<Long>();
+		list.add(12L);
+		list.add(71L);
+		list.add(57L);
+		list.add(23L);
+		list.add(10000L);
+		list.add(88L);	
+		assertTrue(57==StatisticsUtil.getLongMedian(list));
 	}
 	
 	@Test

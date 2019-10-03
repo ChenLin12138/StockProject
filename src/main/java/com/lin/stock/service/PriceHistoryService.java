@@ -20,8 +20,6 @@ public class PriceHistoryService {
 	
 	@Autowired
 	private PriceHistoryMapper mapper;
-	
-	
 	//检查指定股票指定日期是否为交易日
 	//若是交易日返回信息
 	//若不是交易日返回null
@@ -31,6 +29,14 @@ public class PriceHistoryService {
 		priceHistory.setDate(date);
 		priceHistory = mapper.selectByStockCodeAndDate(priceHistory);	
 		return (null == priceHistory) ? null : priceHistory;
+	}
+	
+	public List<String> getAllStockCode(){
+		return mapper.selectAllCodes();
+	}
+	
+	public List<String> getAllBusinessDateByStockCode(String stockCode){
+		return mapper.selectAllDatesByStockCode(stockCode);
 	}
 	
 	public PriceHistory getPreviousBusinessInfo(String stockCode, String date) {	

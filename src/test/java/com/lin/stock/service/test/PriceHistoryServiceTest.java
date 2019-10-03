@@ -18,7 +18,7 @@ import com.lin.stock.service.PriceHistoryService;
 public class PriceHistoryServiceTest extends BaseServiceTest{
 	
 	@Autowired
-	private PriceHistoryService service ;
+	private PriceHistoryService service;
 	
 	@Test
 	public void shouldReturnNullWhenDateIs19890101() {
@@ -92,5 +92,15 @@ public class PriceHistoryServiceTest extends BaseServiceTest{
 		Assert.assertTrue("19980223".equals(results.get(2).getDate()));
 		Assert.assertTrue("19980224".equals(results.get(3).getDate()));
 		Assert.assertTrue("19980225".equals(results.get(4).getDate()));	
+	}
+	
+	@Test
+	public void shouldRetureSize2753WhenStockCodeIs600001() {
+		Assert.assertTrue(2753==service.getAllBusinessDateByStockCode("600001").size());
+	}
+	
+	@Test
+	public void shouldReturnSize3707AsSize() {
+		Assert.assertTrue(3707==service.getAllStockCode().size());
 	}
 }
