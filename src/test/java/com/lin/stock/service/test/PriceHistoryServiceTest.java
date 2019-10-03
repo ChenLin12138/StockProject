@@ -60,6 +60,11 @@ public class PriceHistoryServiceTest extends BaseServiceTest{
 	}
 	
 	@Test
+	public void shouldReturn19980217AsBusinessDate() {
+		Assert.assertTrue("19980217".equals(service.getPreviousBusinessDate("600001", "19980218")));
+	}
+	
+	@Test
 	public void shouldReturn19980217AsBeginDate() {
 		List<PriceHistory> results = service.getPreviousBusinessInfos("600001","19980218",5);
 		Assert.assertTrue("19980217".equals(results.get(0).getDate()));
