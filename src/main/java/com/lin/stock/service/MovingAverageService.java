@@ -21,6 +21,9 @@ public class MovingAverageService {
 	@Autowired
 	PriceHistoryService priceHistoryService;
 	
+	@Autowired
+	BusinessDateService businessDateService;
+	
 	public float getAverage(String date, int numberOfdays, String stockCode) throws InValidDateException{
 		List<PriceHistory> priceHistories = priceHistoryService.getLastInfosByDate(stockCode, date, numberOfdays);
 		if(priceHistories.size() < numberOfdays) {
@@ -34,13 +37,13 @@ public class MovingAverageService {
 	//MA均线是否向上
 	public boolean isMAUp(String date, int numberOfdays, String stockCode) throws InValidDateException {
 		//这有一个bug，如若传入的当天和他的前一天都没有股票交易数据。那么向上和向下无法计算。
-		return getAverage(date,numberOfdays,stockCode) - getAverage(priceHistoryService.getPreviousBusinessDate(stockCode, date),numberOfdays,stockCode) > 0;
+		return getAverage(date,numberOfdays,stockCode) - getAverage(businessDateService.getPreviousBusinessDate(stockCode, date),numberOfdays,stockCode) > 0;
 	}
 	
 	//MA均线是否向下
 	public boolean isMADown(String date, int numberOfdays, String stockCode) throws InValidDateException {
 		//这有一个bug，如若传入的当天和他的前一天都没有股票交易数据。那么向上和向下无法计算。	
-		return getAverage(date,numberOfdays,stockCode) - getAverage(priceHistoryService.getPreviousBusinessDate(stockCode, date),numberOfdays,stockCode) < 0;
+		return getAverage(date,numberOfdays,stockCode) - getAverage(businessDateService.getPreviousBusinessDate(stockCode, date),numberOfdays,stockCode) < 0;
 	}
 	
 	//其实只有一只股票开盘前五天是没有五日均线的，为了这个错误进行大量IO操作，我觉得是不值得的。

@@ -38,10 +38,6 @@ public class PriceHistoryService {
 		return result.get(0);
 	}
 	
-	public String getPreviousBusinessDate(String stockCode, String date) {
-		return getPreviousBusinessInfo(stockCode, date).getDate();
-	}
-	
 	public List<PriceHistory> getLastInfosByDate(String stockCode, String date, int days) {	
 		return mapper.selectLastInfoByDate(stockCode, date, days);
 	}
