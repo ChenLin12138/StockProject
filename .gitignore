@@ -16,3 +16,6 @@
 
 ##ignore others
 .DS_Store
+
+##ignore csv
+*.csv

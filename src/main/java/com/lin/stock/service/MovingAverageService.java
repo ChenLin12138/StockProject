@@ -29,6 +29,7 @@ public class MovingAverageService {
 	BusinessDateService businessDateService;
 	
 	public float getAverage(String date, int numberOfdays, String stockCode) throws InValidDateException{
+		//获取传入日期最后几天的股票信息
 		List<PriceHistory> priceHistories = priceHistoryService.getLastInfosByDate(stockCode, date, numberOfdays);
 		if(priceHistories.size() < numberOfdays) {
 			throw new InValidDateException("Invalid BusinessDate! "+"Stock Code "+stockCode+",date "+date+",NumberOfDate "+numberOfdays+".");

@@ -33,11 +33,11 @@ public class TradeStrategy2 extends BaseTradeStrategy{
 		List<String> stockCodes = priceHistoryService.getAllStockCode();
 		List<String> report = new ArrayList<String>(50000);
 		report.add("StockCode,BuyDate,SellDate,BuyPrice,SellPrice,Change,Rate");
-		for(String stockCode : stockCodes) {
+		//目前测试一只票的cpu时钟
+		for(String stockCode : stockCodes.subList(0, 5)) {
 			clearTrade();
 			List<String> tradeDates = priceHistoryService.getAllBusinessDateByStockCode(stockCode);
 			for(String date : tradeDates.subList(30, tradeDates.size())) {
-				
 				try {
 					if(Trade.EMPTY.equals(trade.getStatus()) && maCorssService.isMA5CrossMA30Up(stockCode, date) && turnOverService.isIncreaseTimesWithMedian(stockCode, date, 10, 2, 3)) {
 						String nextBusinessDate = businessDateService.getNextBusinessDate(stockCode, date);

@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import com.lin.stock.model.PriceHistory;
+import com.lin.stock.model.Tclose;
 
 @Mapper
 public interface PriceHistoryMapper {
@@ -65,7 +66,7 @@ public interface PriceHistoryMapper {
 	public List<PriceHistory> selectNextDatesInfo(String stockCode, String date, int days);
 
 
-	@Select("select pk, CODE,DATE, TCLOSE, HIGH, LOW, TOPEN, CHG, PCHG, TURNOVERRATE, VOTURNOVER, VATURNOVER"
+	@Select("select pk, CODE, DATE, TCLOSE, HIGH, LOW, TOPEN, CHG, PCHG, TURNOVERRATE, VOTURNOVER, VATURNOVER"
 			+" from PRICE_HISTORY"
 			+" where CODE = #{stockCode}"
 			+" and Date <= #{date}"
