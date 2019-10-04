@@ -55,11 +55,12 @@ public class Trade {
 	}
 
 	public float getChg() {
-		return sellPrice-buyPrice;
+		return (float)Math.round((sellPrice-buyPrice)*100)/100;
 	}
 
 	public float getRate() {
-		return (sellPrice-buyPrice)/buyPrice;
+		
+		return (float)Math.round(((sellPrice-buyPrice)/buyPrice)*100)/100;
 	}
 
 	public String getSellDate() {
@@ -71,10 +72,13 @@ public class Trade {
 	}
 	
 	@Override
-	public String toString() {
+	public String toString() {	
+		return "StockCode:"+this.stockCode+","+"BuyDate:"+this.buyDate+","+"SellDate:"+","+this.sellDate+","+"BuyPrice:"+","+this.buyPrice+","+"SellPrice"+this.sellPrice+","+"Chg:"+getChg()+","+"Rate:"+getRate();
 		
-		return "StockCode:"+this.stockCode+"BuyDate:"+this.buyDate+"SellDate:"+this.sellDate+"BuyPrice:"+this.buyPrice+"SellPrice"+this.sellPrice+"Chg:"+getChg()+"Rate:"+getRate();
-		
+	}
+	
+	public String getReportLayout() {
+		return this.stockCode+","+this.buyDate+","+this.sellDate+","+","+this.buyPrice+","+this.sellPrice+","+getChg()+","+getRate()*100+"%";
 	}
 
 }

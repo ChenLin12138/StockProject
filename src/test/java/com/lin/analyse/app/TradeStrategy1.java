@@ -1,5 +1,7 @@
 package com.lin.analyse.app;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -10,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.StopWatch;
 
 import com.lin.stock.config.DataSourceConfig;
 import com.lin.stock.config.MybatisMapperConfig;
@@ -21,12 +24,20 @@ import com.lin.stock.service.MACorssService;
 import com.lin.stock.service.MovingAverageService;
 import com.lin.stock.service.PriceHistoryService;
 import com.lin.stock.service.TurnOverService;
+import com.lin.stock.utils.FileUtil;
 
 /**
  * @author Chen Lin
  * @date 2019-10-03
  */
 
+/*
+ * 买入策略：
+ * 1.五日均线上穿30日线
+ * 2.成交量在10个交易日内出现3次大于10日中位数的2倍
+ * 卖出策略：
+ * 1.五日均线下穿30日线
+ * */
 @RunWith(SpringRunner.class)
 @MybatisTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -52,10 +63,12 @@ public class TradeStrategy1 {
 	private Trade trade = new Trade();
 	
 	@Test
-	public void test() {
-		
-//		List<Trade> trades = new ArrayList<Trade>(4000);
+	public void test() throws IOException {
+		StopWatch sw = new StopWatch();
+		sw.start("TradeStrategy1");
 		List<String> stockCodes = priceHistoryService.getAllStockCode();
+		List<String> report = new ArrayList<String>(50000);
+		report.add("StockCode,BuyDate,SellDate,BuyPrice,SellPrice,Change,Rate");
 		for(String stockCode : stockCodes) {
 			clearTrade();
 			List<String> tradeDates = priceHistoryService.getAllBusinessDateByStockCode(stockCode);
@@ -75,15 +88,18 @@ public class TradeStrategy1 {
 						trade.setSellDate(nextBusinessDate);
 						trade.setSellPrice(nextDatePriceHistory.getTopen());
 						trade.setStatus("E");
+						System.out.println(trade);
+						report.add(trade.getReportLayout());
 					}
 				} catch (InValidDateException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-			System.out.println(trade);
 		}
-		
+		FileUtil.write("TradeStratety1.csv", report);
+		sw.stop();
+        System.out.println(sw.prettyPrint());
 	}
 
 	private void clearTrade() {
