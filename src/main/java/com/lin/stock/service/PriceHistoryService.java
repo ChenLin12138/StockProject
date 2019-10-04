@@ -31,6 +31,10 @@ public class PriceHistoryService {
 		return (null == priceHistory) ? null : priceHistory;
 	}
 	
+	public float getTcloseWithStockCodeAndDate(String stockCode, String date) {
+		return getPriceHistoryWithStockCodeAndDate(stockCode,date).getTclose();
+	}
+	
 	public List<String> getAllStockCode(){
 		return mapper.selectAllCodes();
 	}

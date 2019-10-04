@@ -36,4 +36,14 @@ public class MACorssServiceTest extends BaseServiceTest{
 	public void shouldReturnTrueWhen20190129Stock000783() throws InValidDateException {
 		Assert.assertFalse(maCrossService.isMA5CorssMA30Down("000783", "20190130"));
 	}
+	
+	@Test
+	public void shouldReturnTrueWhen19940531Stock000001() throws InValidDateException {
+		Assert.assertTrue(maCrossService.isMA5CorssMA30Down("000001", "19940531"));
+	}
+	
+	@Test
+	public void shouldReturnTrueWhenDate19950512Stock000001() throws InValidDateException {
+		Assert.assertTrue(maCrossService.isTclosePriceUnderMA10("000001", "19940513"));
+	}
 }

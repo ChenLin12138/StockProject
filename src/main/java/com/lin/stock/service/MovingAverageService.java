@@ -17,7 +17,11 @@ import com.lin.stock.utils.StatisticsUtil;
 
 @Service
 public class MovingAverageService {
-
+	
+	public static int MA5= 5;
+	public static int MA10= 10;
+	public static int MA30= 30;
+	
 	@Autowired
 	PriceHistoryService priceHistoryService;
 	

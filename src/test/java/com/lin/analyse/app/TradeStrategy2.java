@@ -14,7 +14,7 @@ import com.lin.stock.utils.FileUtil;
 
 /**
  * @author Chen Lin
- * @date 2019-10-03
+ * @date 2019-10-04
  */
 
 /*
@@ -22,14 +22,14 @@ import com.lin.stock.utils.FileUtil;
  * 1.五日均线上穿30日线
  * 2.成交量在10个交易日内出现3次大于10日中位数的2倍
  * 卖出策略：
- * 1.五日均线下穿30日线
+ * 1.收盘价下破10日均线
  * */
-public class TradeStrategy1 extends BaseTradeStrategy{
-	
+public class TradeStrategy2 extends BaseTradeStrategy{
+
 	@Test
 	public void start() throws IOException {
 		StopWatch sw = new StopWatch();
-		sw.start("TradeStrategy1");
+		sw.start("TradeStrategy2");
 		List<String> stockCodes = priceHistoryService.getAllStockCode();
 		List<String> report = new ArrayList<String>(50000);
 		report.add("StockCode,BuyDate,SellDate,BuyPrice,SellPrice,Change,Rate");
@@ -46,7 +46,7 @@ public class TradeStrategy1 extends BaseTradeStrategy{
 						trade.setStatus(Trade.HOLDING);
 						trade.setBuyPrice(nextDatePriceHistory.getTopen());
 						trade.setStockCode(stockCode);
-					}else if (Trade.HOLDING.equals(trade.getStatus()) && maCorssService.isMA5CorssMA30Down(stockCode, date)){
+					}else if (Trade.HOLDING.equals(trade.getStatus()) && maCorssService.isTclosePriceUnderMA10(stockCode, date)){
 						String nextBusinessDate = businessDateService.getNextBusinessDate(stockCode, date);
 						PriceHistory nextDatePriceHistory = priceHistoryService.getPriceHistoryWithStockCodeAndDate(stockCode, nextBusinessDate);
 						trade.setSellDate(nextBusinessDate);
@@ -61,7 +61,7 @@ public class TradeStrategy1 extends BaseTradeStrategy{
 				}
 			}
 		}
-		FileUtil.write("TradeStratety1.csv", report);
+		FileUtil.write("TradeStratety2.csv", report);
 		sw.stop();
         System.out.println(sw.prettyPrint());
 	}

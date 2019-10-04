@@ -17,16 +17,21 @@ public class MACorssService {
 	MovingAverageService movingAverageService;
 	
 	@Autowired
+	PriceHistoryService priceHistoryService;
+	
+	
+	@Autowired
 	BusinessDateService businessDateService;
 	
 	
 	public boolean isMA5CrossMA30Up(String stockCode, String date) throws InValidDateException {
 		
-		float currentDateMA5 = movingAverageService.getAverage(date, 5, stockCode);
-		float currentDateMA30 =  movingAverageService.getAverage(date, 30, stockCode);
-		float previousDateMA5 = movingAverageService.getAverage(businessDateService.getPreviousBusinessDate(stockCode, date), 5, stockCode);
+		float currentDateMA5 = movingAverageService.getAverage(date, MovingAverageService.MA5, stockCode);
+		float currentDateMA30 =  movingAverageService.getAverage(date, MovingAverageService.MA30, stockCode);
+		float previousDateMA5 = movingAverageService.getAverage(businessDateService.getPreviousBusinessDate(stockCode, date), MovingAverageService.MA5, stockCode);
+		float previousDateMA30 = movingAverageService.getAverage(businessDateService.getPreviousBusinessDate(stockCode, date), MovingAverageService.MA30, stockCode);
 		
-		if(previousDateMA5<currentDateMA30 && currentDateMA5>currentDateMA30 && movingAverageService.isMAUp(date, 5, stockCode)) {
+		if(previousDateMA5 < previousDateMA30 && currentDateMA5 > currentDateMA30 && movingAverageService.isMAUp(date, MovingAverageService.MA5, stockCode)) {
 			return true;
 		}
 		
@@ -35,16 +40,23 @@ public class MACorssService {
 	
 	public boolean isMA5CorssMA30Down(String stockCode, String date) throws InValidDateException {
 
-		float currentDateMA5 = movingAverageService.getAverage(date, 5, stockCode);
-		float currentDateMA30 =  movingAverageService.getAverage(date, 30, stockCode);
-		float previousDateMA5 = movingAverageService.getAverage(businessDateService.getPreviousBusinessDate(stockCode, date), 5, stockCode);
+		float currentDateMA5 = movingAverageService.getAverage(date, MovingAverageService.MA5, stockCode);
+		float currentDateMA30 =  movingAverageService.getAverage(date, MovingAverageService.MA30, stockCode);
+		float previousDateMA5 = movingAverageService.getAverage(businessDateService.getPreviousBusinessDate(stockCode, date), MovingAverageService.MA5, stockCode);
+		float previousDateMA30 = movingAverageService.getAverage(businessDateService.getPreviousBusinessDate(stockCode, date), MovingAverageService.MA30, stockCode);
 		
-		if(previousDateMA5>currentDateMA30 && currentDateMA5<currentDateMA30 && movingAverageService.isMADown(date, 5, stockCode)) {
+		if(previousDateMA5 > previousDateMA30 && currentDateMA5 < currentDateMA30 && movingAverageService.isMADown(date, MovingAverageService.MA5, stockCode)) {
 			return true;
 		}
 		
 		return false;
 	
+	}
+	
+	public boolean isTclosePriceUnderMA10(String stockCode, String date) throws InValidDateException {
+		float currentDateMA10 = movingAverageService.getAverage(date, MovingAverageService.MA10, stockCode);
+		float tclose = priceHistoryService.getTcloseWithStockCodeAndDate(stockCode, date);
+		return tclose < currentDateMA10;
 	}
 	
 }

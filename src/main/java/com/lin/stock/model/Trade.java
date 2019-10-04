@@ -7,6 +7,9 @@ package com.lin.stock.model;
 
 public class Trade {
 
+	public static final String EMPTY = "E";
+	public static final String HOLDING = "H";
+	
 	private float buyPrice;
 	private float sellPrice;
 	private String buyDate;
@@ -73,12 +76,12 @@ public class Trade {
 	
 	@Override
 	public String toString() {	
-		return "StockCode:"+this.stockCode+","+"BuyDate:"+this.buyDate+","+"SellDate:"+","+this.sellDate+","+"BuyPrice:"+","+this.buyPrice+","+"SellPrice"+this.sellPrice+","+"Chg:"+getChg()+","+"Rate:"+getRate();
+		return "StockCode:"+this.stockCode+",BuyDate:"+this.buyDate+",SellDate:"+this.sellDate+",BuyPrice:"+this.buyPrice+",SellPrice:"+this.sellPrice+",Chg:"+getChg()+",Rate:"+getRate()*100+"%";
 		
 	}
 	
 	public String getReportLayout() {
-		return this.stockCode+","+this.buyDate+","+this.sellDate+","+","+this.buyPrice+","+this.sellPrice+","+getChg()+","+getRate()*100+"%";
+		return this.stockCode+","+this.buyDate+","+this.sellDate+","+this.buyPrice+","+this.sellPrice+","+getChg()+","+getRate()*100+"%";
 	}
 
 }
