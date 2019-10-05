@@ -1,11 +1,13 @@
 package com.lin.stock.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lin.stock.cache.PriceHistoryCache;
 import com.lin.stock.exceptions.InValidDateException;
 import com.lin.stock.model.PriceHistory;
 import com.lin.stock.utils.StatisticsUtil;
@@ -28,12 +30,35 @@ public class MovingAverageService {
 	@Autowired
 	BusinessDateService businessDateService;
 	
+	@Autowired
+	PriceHistoryCache cache;
+	
 	public float getAverage(String date, int numberOfdays, String stockCode) throws InValidDateException{
-		//获取传入日期最后几天的股票信息
-		List<PriceHistory> priceHistories = priceHistoryService.getLastInfosByDate(stockCode, date, numberOfdays);
-		if(priceHistories.size() < numberOfdays) {
-			throw new InValidDateException("Invalid BusinessDate! "+"Stock Code "+stockCode+",date "+date+",NumberOfDate "+numberOfdays+".");
+		
+		List<PriceHistory> priceHistories = new ArrayList<PriceHistory> ();	
+		
+		if(!cache.isEmpty()) {
+			PriceHistory priceHistory = new PriceHistory();
+			priceHistory.setCode(stockCode);
+			priceHistory.setDate(date);
+			List<PriceHistory> cachedList = cache.getStockTradeList(stockCode);
+			int indexOfPriceHistory = cachedList.indexOf(priceHistory);
+
+			if(indexOfPriceHistory + 1 < numberOfdays) {
+				throw new InValidDateException("Invalid BusinessDate! "+"Stock Code "+stockCode+",date "+date+",NumberOfDate "+numberOfdays+".");
+			}
+			
+			for(int i = indexOfPriceHistory ; i > indexOfPriceHistory - numberOfdays; i--) {
+				priceHistories.add(cachedList.get(i));
+			}
+		}else {
+			//获取传入日期最后几天的股票信息
+			priceHistories = priceHistoryService.getLastInfosByDate(stockCode, date, numberOfdays);
+			if(priceHistories.size() < numberOfdays) {
+				throw new InValidDateException("Invalid BusinessDate! "+"Stock Code "+stockCode+",date "+date+",NumberOfDate "+numberOfdays+".");
+			}
 		}
+		
 		//从对象列表中抽取每个元素的Tclose组成新的列表
 		List<Float> list = priceHistories.stream().map(PriceHistory::getTclose).collect(Collectors.toList());
 		return StatisticsUtil.getFloatAverageAround2(list);

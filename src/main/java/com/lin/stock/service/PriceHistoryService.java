@@ -56,6 +56,10 @@ public class PriceHistoryService {
 		return mapper.selectPreviousDatesInfo(stockCode, date, days);
 	}
 	
+	public List<PriceHistory> getPriceHistoryByStockCode(String stockCode){
+		return mapper.selectPriceHistoryByStockCode(stockCode);
+	}
+	
 	public PriceHistory getNextBusinessInfo(String stockCode, String date) {	
 		List<PriceHistory> result = mapper.selectNextDatesInfo(stockCode, date, 1);
 		return result.get(0);

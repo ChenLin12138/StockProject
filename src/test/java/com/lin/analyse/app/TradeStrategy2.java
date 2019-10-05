@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StopWatch;
 
+import com.lin.stock.cache.PriceHistoryCache;
 import com.lin.stock.exceptions.InValidDateException;
 import com.lin.stock.model.PriceHistory;
 import com.lin.stock.model.Trade;
@@ -25,9 +27,13 @@ import com.lin.stock.utils.FileUtil;
  * 1.收盘价下破10日均线
  * */
 public class TradeStrategy2 extends BaseTradeStrategy{
-
+	
+	@Autowired
+	PriceHistoryCache  priceHistoryCache;
+	
 	@Test
 	public void start() throws IOException {
+		priceHistoryCache.loadCache();
 		StopWatch sw = new StopWatch();
 		sw.start("TradeStrategy2");
 		List<String> stockCodes = priceHistoryService.getAllStockCode();
@@ -65,4 +71,6 @@ public class TradeStrategy2 extends BaseTradeStrategy{
 		sw.stop();
         System.out.println(sw.prettyPrint());
 	}
+	
+
 }

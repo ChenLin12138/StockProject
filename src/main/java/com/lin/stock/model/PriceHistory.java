@@ -126,7 +126,8 @@ public class PriceHistory {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((pk == null) ? 0 : pk.hashCode());
+		result = prime * result + ((code == null) ? 0 : code.hashCode());
+		result = prime * result + ((date == null) ? 0 : date.hashCode());
 		return result;
 	}
 
@@ -139,14 +140,16 @@ public class PriceHistory {
 		if (getClass() != obj.getClass())
 			return false;
 		PriceHistory other = (PriceHistory) obj;
-		if (pk == null) {
-			if (other.pk != null)
+		if (code == null) {
+			if (other.code != null)
 				return false;
-		} else if (!pk.equals(other.pk))
+		} else if (!code.equals(other.code))
+			return false;
+		if (date == null) {
+			if (other.date != null)
+				return false;
+		} else if (!date.equals(other.date))
 			return false;
 		return true;
 	}
-    
-    
-    
 }

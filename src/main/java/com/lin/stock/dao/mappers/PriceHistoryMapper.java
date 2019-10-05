@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import com.lin.stock.model.PriceHistory;
-import com.lin.stock.model.Tclose;
 
 @Mapper
 public interface PriceHistoryMapper {
@@ -27,6 +26,12 @@ public interface PriceHistoryMapper {
 			+" where CODE = #{stockCode}"
 			+" order by date limit 1")
 	public PriceHistory selectFirstBusinessInfo(String stockCode);
+	
+	@Select("select pk, CODE,DATE, TCLOSE, HIGH, LOW, TOPEN, CHG, PCHG, TURNOVERRATE, VOTURNOVER, VATURNOVER"
+			+" from PRICE_HISTORY"
+			+" where CODE = #{stockCode}"
+			+" order by date")
+	public List<PriceHistory> selectPriceHistoryByStockCode(String stockCode);
 	
 	@Select("select pk, CODE,DATE, TCLOSE, HIGH, LOW, TOPEN, CHG, PCHG, TURNOVERRATE, VOTURNOVER, VATURNOVER"
 	+ " from PRICE_HISTORY"
