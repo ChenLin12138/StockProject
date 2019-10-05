@@ -59,4 +59,14 @@ public class PriceHistoryCacheTest extends BaseServiceTest{
 		Assert.assertTrue("20190219".equals(list.get(4).getDate()));
 	}
 	
+	@Test
+	public void shouldReturn20190301AsNextDateWhenStockCodeIs000001AndDateIs20190228() throws InValidDateException {
+		Assert.assertTrue("20190301".equals(priceHistoryCache.getNextPriceHistoryDate("000001", "20190228")));
+	}
+	
+	@Test
+	public void shouldReturn20190222AsPreviousDateWhenStockCodeIs000001AndDateIs20190225() throws InValidDateException {
+		Assert.assertTrue("20190222".equals(priceHistoryCache.getPreviousPriceHistoryDate("000001", "20190225")));
+	}
+	
 }

@@ -101,6 +101,16 @@ public class PriceHistoryCache {
 		return results;
 	}
 	
+	public String getNextPriceHistoryDate(String stockCode, String date) throws InValidDateException {
+		List<PriceHistory> list = getNextPriceHistoryInfos(stockCode, date, 2);
+		return list.get(1).getDate();
+	}
+	
+	public String getPreviousPriceHistoryDate(String stockCode, String date) throws InValidDateException {
+		List<PriceHistory> list = getPreviousPriceHistoryInfos(stockCode, date, 2);
+		return list.get(1).getDate();
+	}
+	
 	public boolean isEmpty() {
 		return cacheMap.isEmpty();
 	}

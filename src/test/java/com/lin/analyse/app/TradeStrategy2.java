@@ -33,14 +33,14 @@ public class TradeStrategy2 extends BaseTradeStrategy{
 	
 	@Test
 	public void start() throws IOException {
-		priceHistoryCache.loadCache();
+		priceHistoryCache.LoadCacheByStock("000001");;
 		StopWatch sw = new StopWatch();
 		sw.start("TradeStrategy2");
 		List<String> stockCodes = priceHistoryService.getAllStockCode();
 		List<String> report = new ArrayList<String>(50000);
 		report.add("StockCode,BuyDate,SellDate,BuyPrice,SellPrice,Change,Rate");
 		//目前测试一只票的cpu时钟
-		for(String stockCode : stockCodes.subList(0, 5)) {
+		for(String stockCode : stockCodes.subList(0, 1)) {
 			clearTrade();
 			List<String> tradeDates = priceHistoryService.getAllBusinessDateByStockCode(stockCode);
 			for(String date : tradeDates.subList(30, tradeDates.size())) {

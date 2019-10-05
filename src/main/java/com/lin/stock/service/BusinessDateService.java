@@ -3,7 +3,9 @@ package com.lin.stock.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lin.stock.cache.PriceHistoryCache;
 import com.lin.stock.dao.mappers.PriceHistoryMapper;
+import com.lin.stock.exceptions.InValidDateException;
 
 /**
  * @author Chen Lin
@@ -14,16 +16,27 @@ import com.lin.stock.dao.mappers.PriceHistoryMapper;
 public class BusinessDateService {
 
 	@Autowired
-	private PriceHistoryMapper mapper;
-	
-	@Autowired
 	private PriceHistoryService service;
 	
-	public String getPreviousBusinessDate(String stockCode, String date) {
-		return service.getPreviousBusinessInfo(stockCode, date).getDate();
+	@Autowired
+	PriceHistoryCache priceHistoryCache;
+	
+	public String getPreviousBusinessDate(String stockCode, String date) throws InValidDateException {
+		if(!priceHistoryCache.isEmpty()) {
+			return priceHistoryCache.getPreviousPriceHistoryDate(stockCode,date);
+		}else
+		{
+			return service.getPreviousBusinessInfo(stockCode, date).getDate();
+		}
+		
 	}
 	
-	public String getNextBusinessDate(String stockCode, String date) {
-		return service.getNextBusinessInfo(stockCode, date).getDate();
+	public String getNextBusinessDate(String stockCode, String date) throws InValidDateException {
+		if(!priceHistoryCache.isEmpty()) {
+			return priceHistoryCache.getNextPriceHistoryDate(stockCode,date);
+		}else {
+			return service.getNextBusinessInfo(stockCode, date).getDate();
+		}
+		
 	}
 }
