@@ -3,11 +3,10 @@ package com.lin.stock.service.test;
 import java.text.ParseException;
 
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.lin.stock.cache.PriceHistoryCache;
 import com.lin.stock.exceptions.InValidDateException;
 import com.lin.stock.service.MovingAverageService;
 
@@ -21,9 +20,13 @@ public class MovingAverageServiceTest extends BaseServiceTest{
 	@Autowired
 	private MovingAverageService service ;
 	
+	@Autowired
+	PriceHistoryCache priceHistoryCache;
+	
 	//方便缓存计算
 	@Test
 	public void shouldReturn11don63WhenDateIs20190225CodeIs000001AsMA5() throws InValidDateException, ParseException {
+		priceHistoryCache.LoadCacheByStock("000001");
 		Assert.assertTrue(11.63f==service.getAverage("20190225", MovingAverageService.MA5, "000001"));
 	}
 	

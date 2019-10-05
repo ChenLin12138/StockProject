@@ -31,26 +31,28 @@ public class MovingAverageService {
 	BusinessDateService businessDateService;
 	
 	@Autowired
-	PriceHistoryCache cache;
+	PriceHistoryCache priceHistoryCache;
 	
 	public float getAverage(String date, int numberOfdays, String stockCode) throws InValidDateException{
 		
 		List<PriceHistory> priceHistories = new ArrayList<PriceHistory> ();	
 		
-		if(!cache.isEmpty()) {
-			PriceHistory priceHistory = new PriceHistory();
-			priceHistory.setCode(stockCode);
-			priceHistory.setDate(date);
-			List<PriceHistory> cachedList = cache.getStockTradeList(stockCode);
-			int indexOfPriceHistory = cachedList.indexOf(priceHistory);
-
-			if(indexOfPriceHistory + 1 < numberOfdays) {
-				throw new InValidDateException("Invalid BusinessDate! "+"Stock Code "+stockCode+",date "+date+",NumberOfDate "+numberOfdays+".");
-			}
+		if(!priceHistoryCache.isEmpty()) {
+//			PriceHistory priceHistory = new PriceHistory();
+//			priceHistory.setCode(stockCode);
+//			priceHistory.setDate(date);
+//			List<PriceHistory> cachedList = cache.getStockTradeList(stockCode);
+//			int indexOfPriceHistory = cachedList.indexOf(priceHistory);
+//
+//			if(indexOfPriceHistory + 1 < numberOfdays) {
+//				throw new InValidDateException("Invalid BusinessDate! "+"Stock Code "+stockCode+",date "+date+",NumberOfDate "+numberOfdays+".");
+//			}
+//			
+//			for(int i = indexOfPriceHistory ; i > indexOfPriceHistory - numberOfdays; i--) {
+//				priceHistories.add(cachedList.get(i));
+//			}
+			priceHistories = priceHistoryCache.getPreviousPriceHistoryInfos(stockCode, date, numberOfdays);
 			
-			for(int i = indexOfPriceHistory ; i > indexOfPriceHistory - numberOfdays; i--) {
-				priceHistories.add(cachedList.get(i));
-			}
 		}else {
 			//获取传入日期最后几天的股票信息
 			priceHistories = priceHistoryService.getLastInfosByDate(stockCode, date, numberOfdays);
