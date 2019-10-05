@@ -28,6 +28,6 @@ public class BaseServiceTest {
 	public ExpectedException expectedEx = ExpectedException.none();
 	
 	@Test
-	public void test() {
+	public void dummp() {
 	}
 }

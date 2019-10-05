@@ -28,33 +28,40 @@ import com.lin.stock.utils.FileUtil;
  * */
 public class TradeStrategy2 extends BaseTradeStrategy{
 	
+	public static final int STATISTICS_START_DATE = 30;
+	
 	@Autowired
 	PriceHistoryCache  priceHistoryCache;
 	
 	@Test
 	public void start() throws IOException {
-		priceHistoryCache.LoadCacheByStock("000001");;
 		StopWatch sw = new StopWatch();
+		sw.start("DataLoad");
+		priceHistoryCache.loadCache();
+		sw.stop();
+        System.out.println(sw.prettyPrint());
 		sw.start("TradeStrategy2");
 		List<String> stockCodes = priceHistoryService.getAllStockCode();
 		List<String> report = new ArrayList<String>(50000);
 		report.add("StockCode,BuyDate,SellDate,BuyPrice,SellPrice,Change,Rate");
 		//目前测试一只票的cpu时钟
-		for(String stockCode : stockCodes.subList(0, 1)) {
+		for(String stockCode : stockCodes) {
 			clearTrade();
 			List<String> tradeDates = priceHistoryService.getAllBusinessDateByStockCode(stockCode);
-			for(String date : tradeDates.subList(30, tradeDates.size())) {
+			for(String date : tradeDates.subList(STATISTICS_START_DATE, tradeDates.size())) {
 				try {
 					if(Trade.EMPTY.equals(trade.getStatus()) && maCorssService.isMA5CrossMA30Up(stockCode, date) && turnOverService.isIncreaseTimesWithMedian(stockCode, date, 10, 2, 3)) {
 						String nextBusinessDate = businessDateService.getNextBusinessDate(stockCode, date);
-						PriceHistory nextDatePriceHistory = priceHistoryService.getPriceHistoryWithStockCodeAndDate(stockCode, nextBusinessDate);
+						PriceHistory nextDatePriceHistory = priceHistoryCache.getPriceHistoryInfo(stockCode, nextBusinessDate);
+//						PriceHistory nextDatePriceHistory = priceHistoryService.getPriceHistoryWithStockCodeAndDate(stockCode, nextBusinessDate);
 						trade.setBuyDate(nextBusinessDate);
 						trade.setStatus(Trade.HOLDING);
 						trade.setBuyPrice(nextDatePriceHistory.getTopen());
 						trade.setStockCode(stockCode);
 					}else if (Trade.HOLDING.equals(trade.getStatus()) && maCorssService.isTclosePriceUnderMA10(stockCode, date)){
 						String nextBusinessDate = businessDateService.getNextBusinessDate(stockCode, date);
-						PriceHistory nextDatePriceHistory = priceHistoryService.getPriceHistoryWithStockCodeAndDate(stockCode, nextBusinessDate);
+//						PriceHistory nextDatePriceHistory = priceHistoryService.getPriceHistoryWithStockCodeAndDate(stockCode, nextBusinessDate);
+						PriceHistory nextDatePriceHistory = priceHistoryCache.getPriceHistoryInfo(stockCode, nextBusinessDate);
 						trade.setSellDate(nextBusinessDate);
 						trade.setSellPrice(nextDatePriceHistory.getTopen());
 						trade.setStatus(Trade.EMPTY);
@@ -71,6 +78,4 @@ public class TradeStrategy2 extends BaseTradeStrategy{
 		sw.stop();
         System.out.println(sw.prettyPrint());
 	}
-	
-
 }
