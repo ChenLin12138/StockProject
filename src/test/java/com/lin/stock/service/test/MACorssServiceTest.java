@@ -1,9 +1,11 @@
 package com.lin.stock.service.test;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.lin.stock.cache.PriceHistoryCache;
 import com.lin.stock.exceptions.InValidDateException;
 import com.lin.stock.service.MACorssService;
 
@@ -16,6 +18,15 @@ public class MACorssServiceTest extends BaseServiceTest{
 
 	@Autowired
 	MACorssService maCrossService;
+	
+	@Autowired
+	PriceHistoryCache priceHistoryCache;
+	
+	@Before
+	public void loadCache() {
+		priceHistoryCache.LoadCacheByStock("000001");
+		priceHistoryCache.LoadCacheByStock("000783");
+	}
 	
 	@Test
 	public void shouldReturnTrueWhen20190213Stock000783() throws InValidDateException {

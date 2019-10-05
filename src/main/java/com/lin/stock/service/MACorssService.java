@@ -3,6 +3,7 @@ package com.lin.stock.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lin.stock.cache.PriceHistoryCache;
 import com.lin.stock.exceptions.InValidDateException;
 
 /**
@@ -22,6 +23,9 @@ public class MACorssService {
 	
 	@Autowired
 	BusinessDateService businessDateService;
+	
+	@Autowired
+	PriceHistoryCache priceHistoryCache;
 	
 	
 	public boolean isMA5CrossMA30Up(String stockCode, String date) throws InValidDateException {
@@ -55,8 +59,7 @@ public class MACorssService {
 	
 	public boolean isTclosePriceUnderMA10(String stockCode, String date) throws InValidDateException {
 		float currentDateMA10 = movingAverageService.getAverage(date, MovingAverageService.MA10, stockCode);
-		//这个还没走缓存，可以修改
-		float tclose = priceHistoryService.getTcloseWithStockCodeAndDate(stockCode, date);
+		float tclose = priceHistoryCache.getPriceHistoryInfo(stockCode,date).getTclose();
 		return tclose < currentDateMA10;
 	}
 	

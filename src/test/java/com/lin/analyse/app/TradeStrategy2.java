@@ -3,6 +3,7 @@ package com.lin.analyse.app;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,11 @@ public class TradeStrategy2 extends BaseTradeStrategy{
 		StopWatch sw = new StopWatch();
 		sw.start("DataLoad");
 		priceHistoryCache.loadCache();
+//		priceHistoryCache.LoadCacheByStock("000001");
+//		priceHistoryCache.LoadCacheByStock("000002");
+//		priceHistoryCache.LoadCacheByStock("000003");
+//		priceHistoryCache.LoadCacheByStock("000004");
+//		priceHistoryCache.LoadCacheByStock("000005");
 		sw.stop();
         System.out.println(sw.prettyPrint());
 		sw.start("TradeStrategy2");
@@ -45,24 +51,20 @@ public class TradeStrategy2 extends BaseTradeStrategy{
 		List<String> stockCodes = priceHistoryService.getAllStockCode();
 		List<String> report = new ArrayList<String>(50000);
 		report.add("StockCode,BuyDate,SellDate,BuyPrice,SellPrice,Change,Rate");
-		//目前测试一只票的cpu时钟
 		for(String stockCode : stockCodes) {
 			clearTrade();
-			//这个还可以走缓存
-			List<String> tradeDates = priceHistoryService.getAllBusinessDateByStockCode(stockCode);
+			List<String> tradeDates = priceHistoryCache.getStockTradeList(stockCode).stream().map(PriceHistory::getDate).collect(Collectors.toList());
 			for(String date : tradeDates.subList(STATISTICS_START_DATE, tradeDates.size())) {
 				try {
 					if(Trade.EMPTY.equals(trade.getStatus()) && maCorssService.isMA5CrossMA30Up(stockCode, date) && turnOverService.isIncreaseTimesWithMedian(stockCode, date, 10, 2, 3)) {
 						String nextBusinessDate = businessDateService.getNextBusinessDate(stockCode, date);
 						PriceHistory nextDatePriceHistory = priceHistoryCache.getPriceHistoryInfo(stockCode, nextBusinessDate);
-//						PriceHistory nextDatePriceHistory = priceHistoryService.getPriceHistoryWithStockCodeAndDate(stockCode, nextBusinessDate);
 						trade.setBuyDate(nextBusinessDate);
 						trade.setStatus(Trade.HOLDING);
 						trade.setBuyPrice(nextDatePriceHistory.getTopen());
 						trade.setStockCode(stockCode);
 					}else if (Trade.HOLDING.equals(trade.getStatus()) && maCorssService.isTclosePriceUnderMA10(stockCode, date)){
 						String nextBusinessDate = businessDateService.getNextBusinessDate(stockCode, date);
-//						PriceHistory nextDatePriceHistory = priceHistoryService.getPriceHistoryWithStockCodeAndDate(stockCode, nextBusinessDate);
 						PriceHistory nextDatePriceHistory = priceHistoryCache.getPriceHistoryInfo(stockCode, nextBusinessDate);
 						trade.setSellDate(nextBusinessDate);
 						trade.setSellPrice(nextDatePriceHistory.getTopen());
