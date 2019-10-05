@@ -95,6 +95,9 @@ public class PriceHistoryCache {
 		List<PriceHistory> list = getStockTradeList(priceHistory.getCode());
 		int index = list.indexOf(priceHistory);
 	 	List<PriceHistory> results = new ArrayList<PriceHistory>(numberOfdays);
+		if(index + 1 + numberOfdays > list.size()) {
+			throw new InValidDateException("Invalid BusinessDate! "+"Stock Code "+priceHistory.getCode()+",date "+priceHistory.getDate()+",NumberOfDate "+numberOfdays+".");
+		}
 		for(int i = index ; i < index + numberOfdays; i++) {
 			results.add(list.get(i));
 		}

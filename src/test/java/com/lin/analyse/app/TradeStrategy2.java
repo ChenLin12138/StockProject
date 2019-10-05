@@ -39,7 +39,7 @@ public class TradeStrategy2 extends BaseTradeStrategy{
 		StopWatch sw = new StopWatch();
 		sw.start("DataLoad");
 		priceHistoryCache.loadCache();
-//		priceHistoryCache.LoadCacheByStock("000001");
+//		priceHistoryCache.LoadCacheByStock("000655");
 //		priceHistoryCache.LoadCacheByStock("000002");
 //		priceHistoryCache.LoadCacheByStock("000003");
 //		priceHistoryCache.LoadCacheByStock("000004");
@@ -47,34 +47,39 @@ public class TradeStrategy2 extends BaseTradeStrategy{
 		sw.stop();
         System.out.println(sw.prettyPrint());
 		sw.start("TradeStrategy2");
-		//这个还可以走缓存
 		List<String> stockCodes = priceHistoryService.getAllStockCode();
 		List<String> report = new ArrayList<String>(50000);
 		report.add("StockCode,BuyDate,SellDate,BuyPrice,SellPrice,Change,Rate");
-		for(String stockCode : stockCodes) {
+		for(String stockCode : stockCodes.subList(1422, 3707)) {
 			clearTrade();
 			List<String> tradeDates = priceHistoryCache.getStockTradeList(stockCode).stream().map(PriceHistory::getDate).collect(Collectors.toList());
-			for(String date : tradeDates.subList(STATISTICS_START_DATE, tradeDates.size())) {
-				try {
-					if(Trade.EMPTY.equals(trade.getStatus()) && maCorssService.isMA5CrossMA30Up(stockCode, date) && turnOverService.isIncreaseTimesWithMedian(stockCode, date, 10, 2, 3)) {
-						String nextBusinessDate = businessDateService.getNextBusinessDate(stockCode, date);
-						PriceHistory nextDatePriceHistory = priceHistoryCache.getPriceHistoryInfo(stockCode, nextBusinessDate);
-						trade.setBuyDate(nextBusinessDate);
-						trade.setStatus(Trade.HOLDING);
-						trade.setBuyPrice(nextDatePriceHistory.getTopen());
-						trade.setStockCode(stockCode);
-					}else if (Trade.HOLDING.equals(trade.getStatus()) && maCorssService.isTclosePriceUnderMA10(stockCode, date)){
-						String nextBusinessDate = businessDateService.getNextBusinessDate(stockCode, date);
-						PriceHistory nextDatePriceHistory = priceHistoryCache.getPriceHistoryInfo(stockCode, nextBusinessDate);
-						trade.setSellDate(nextBusinessDate);
-						trade.setSellPrice(nextDatePriceHistory.getTopen());
-						trade.setStatus(Trade.EMPTY);
-						System.out.println(trade);
-						report.add(trade.getReportLayout());
+			if(tradeDates.size() > STATISTICS_START_DATE) { 
+				for(String date : tradeDates.subList(STATISTICS_START_DATE, tradeDates.size())) {
+					try {
+						if(Trade.EMPTY.equals(trade.getStatus()) && maCorssService.isMA5CrossMA30Up(stockCode, date) && turnOverService.isIncreaseTimesWithMedian(stockCode, date, 10, 2, 3)) {
+							try {
+								String nextBusinessDate = businessDateService.getNextBusinessDate(stockCode, date);
+								PriceHistory nextDatePriceHistory = priceHistoryCache.getPriceHistoryInfo(stockCode, nextBusinessDate);
+								trade.setBuyDate(nextBusinessDate);
+								trade.setStatus(Trade.HOLDING);
+								trade.setBuyPrice(nextDatePriceHistory.getTopen());
+								trade.setStockCode(stockCode);
+							}catch(InValidDateException e) {
+								e.printStackTrace();
+							}			
+						}else if (Trade.HOLDING.equals(trade.getStatus()) && maCorssService.isTclosePriceUnderMA10(stockCode, date)){
+							String nextBusinessDate = businessDateService.getNextBusinessDate(stockCode, date);
+							PriceHistory nextDatePriceHistory = priceHistoryCache.getPriceHistoryInfo(stockCode, nextBusinessDate);
+							trade.setSellDate(nextBusinessDate);
+							trade.setSellPrice(nextDatePriceHistory.getTopen());
+							trade.setStatus(Trade.EMPTY);
+							System.out.println(trade);
+							report.add(trade.getReportLayout());
+						}
+					} catch (InValidDateException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-				} catch (InValidDateException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
 			}
 		}
