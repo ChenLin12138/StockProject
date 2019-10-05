@@ -41,12 +41,14 @@ public class TradeStrategy2 extends BaseTradeStrategy{
 		sw.stop();
         System.out.println(sw.prettyPrint());
 		sw.start("TradeStrategy2");
+		//这个还可以走缓存
 		List<String> stockCodes = priceHistoryService.getAllStockCode();
 		List<String> report = new ArrayList<String>(50000);
 		report.add("StockCode,BuyDate,SellDate,BuyPrice,SellPrice,Change,Rate");
 		//目前测试一只票的cpu时钟
 		for(String stockCode : stockCodes) {
 			clearTrade();
+			//这个还可以走缓存
 			List<String> tradeDates = priceHistoryService.getAllBusinessDateByStockCode(stockCode);
 			for(String date : tradeDates.subList(STATISTICS_START_DATE, tradeDates.size())) {
 				try {
