@@ -11,6 +11,7 @@ import org.springframework.util.StopWatch;
 
 import com.lin.stock.cache.PriceHistoryCache;
 import com.lin.stock.exceptions.InValidDateException;
+import com.lin.stock.filters.DividendRightFilter;
 import com.lin.stock.model.PriceHistory;
 import com.lin.stock.model.Trade;
 import com.lin.stock.utils.FileUtil;
@@ -34,12 +35,15 @@ public class TradeStrategy2 extends BaseTradeStrategy{
 	@Autowired
 	PriceHistoryCache  priceHistoryCache;
 	
+	@Autowired
+	DividendRightFilter dividendRightFilter;
+	
 	@Test
 	public void start() throws IOException {
 		StopWatch sw = new StopWatch();
 		sw.start("DataLoad");
 		priceHistoryCache.loadCache();
-//		priceHistoryCache.LoadCacheByStock("000655");
+//		priceHistoryCache.LoadCacheByStock("600608");
 //		priceHistoryCache.LoadCacheByStock("000002");
 //		priceHistoryCache.LoadCacheByStock("000003");
 //		priceHistoryCache.LoadCacheByStock("000004");
@@ -50,7 +54,7 @@ public class TradeStrategy2 extends BaseTradeStrategy{
 		List<String> stockCodes = priceHistoryService.getAllStockCode();
 		List<String> report = new ArrayList<String>(50000);
 		report.add("StockCode,BuyDate,SellDate,BuyPrice,SellPrice,Change,Rate");
-		for(String stockCode : stockCodes.subList(1422, 3707)) {
+		for(String stockCode : stockCodes) {
 			clearTrade();
 			List<String> tradeDates = priceHistoryCache.getStockTradeList(stockCode).stream().map(PriceHistory::getDate).collect(Collectors.toList());
 			if(tradeDates.size() > STATISTICS_START_DATE) { 
@@ -67,14 +71,17 @@ public class TradeStrategy2 extends BaseTradeStrategy{
 							}catch(InValidDateException e) {
 								e.printStackTrace();
 							}			
-						}else if (Trade.HOLDING.equals(trade.getStatus()) && maCorssService.isTclosePriceUnderMA10(stockCode, date)){
-							String nextBusinessDate = businessDateService.getNextBusinessDate(stockCode, date);
-							PriceHistory nextDatePriceHistory = priceHistoryCache.getPriceHistoryInfo(stockCode, nextBusinessDate);
-							trade.setSellDate(nextBusinessDate);
-							trade.setSellPrice(nextDatePriceHistory.getTopen());
-							trade.setStatus(Trade.EMPTY);
-							System.out.println(trade);
-							report.add(trade.getReportLayout());
+						}else if (Trade.HOLDING.equals(trade.getStatus())){
+							if(dividendRightFilter.filer(priceHistoryCache.getPriceHistoryInfo(stockCode, date))) {
+								clearTrade();
+							}else if(maCorssService.isTclosePriceUnderMA10(stockCode, date)){
+								PriceHistory datePriceHistory = priceHistoryCache.getPriceHistoryInfo(stockCode, date);
+								trade.setSellDate(date);
+								trade.setSellPrice(datePriceHistory.getTopen());
+								trade.setStatus(Trade.EMPTY);
+								System.out.println(trade);
+								report.add(trade.getReportLayout());
+							}
 						}
 					} catch (InValidDateException e) {
 						// TODO Auto-generated catch block
