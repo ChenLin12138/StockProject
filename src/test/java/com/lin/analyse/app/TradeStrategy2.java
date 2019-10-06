@@ -43,7 +43,7 @@ public class TradeStrategy2 extends BaseTradeStrategy{
 		StopWatch sw = new StopWatch();
 		sw.start("DataLoad");
 		priceHistoryCache.loadCache();
-//		priceHistoryCache.LoadCacheByStock("600608");
+//		priceHistoryCache.LoadCacheByStock("002333");
 //		priceHistoryCache.LoadCacheByStock("000002");
 //		priceHistoryCache.LoadCacheByStock("000003");
 //		priceHistoryCache.LoadCacheByStock("000004");
