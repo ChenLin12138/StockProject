@@ -31,6 +31,7 @@ public class PriceHistoryCache {
 //		loadCache();
 //	}
 	
+	//加载所有股票所有交易记录
 	public void loadCache() {
 		if(!isEmpty()) {
 			cacheMap.clear();
@@ -41,14 +42,32 @@ public class PriceHistoryCache {
 		}
 	}
 	
+	//加载某只股票所有交易记录
 	public void LoadCacheByStock(String stockCode) {	
 		if(!isEmpty()) {
 			cacheMap.clear();
 		}
-		//加载某只股票所有交易记录
 		putOneStockTradesIntoCache(stockCode);
 	}
+	
+	//加载特定时间段股票交易记录
+	public void LoadCacheByDateRange(String beginDate, String endDate) {
+		if(!isEmpty()) {
+			cacheMap.clear();
+		}
+		
+		List<String> stockCodes = priceHistoryService.getAllStockCode();
+		for(String stockCode : stockCodes) {
+			putOneStockTradesIntoCacheByDateRange(stockCode,beginDate,endDate);
+		}
+	}
 
+	private void putOneStockTradesIntoCacheByDateRange(String stockCode, String beginDate, String endDate) {
+		List<PriceHistory> tradeDates = priceHistoryService.getStockPriceByDateRange(stockCode, beginDate, endDate);
+		TreeList treeList = new TreeList(tradeDates);
+		cacheMap.put(stockCode, treeList);
+	}
+	
 	private void putOneStockTradesIntoCache(String stockCode) {
 		List<PriceHistory> tradeDates = priceHistoryService.getPriceHistoryByStockCode(stockCode);
 		TreeList treeList = new TreeList(tradeDates);
@@ -125,5 +144,7 @@ public class PriceHistoryCache {
 	public boolean isEmpty() {
 		return cacheMap.isEmpty();
 	}
+
+
 	
 }

@@ -48,6 +48,10 @@ public class PriceHistoryService {
 		return result.get(0);
 	}
 	
+	public List<PriceHistory>  getPriceHistoriesByFromToDate(String fromDate, String toDate){
+		return mapper.selectPriceHistoriesByFromToDate(fromDate, toDate);
+	}
+	
 	public List<PriceHistory> getLastInfosByDate(String stockCode, String date, int days) {	
 		return mapper.selectLastInfoByDate(stockCode, date, days);
 	}

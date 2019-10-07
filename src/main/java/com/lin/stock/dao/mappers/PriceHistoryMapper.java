@@ -79,6 +79,14 @@ public interface PriceHistoryMapper {
 	public List<PriceHistory> selectLastInfoByDate(String stockCode, String date, int days);
 	
 	
+	@Select("select pk, CODE, DATE, TCLOSE, HIGH, LOW, TOPEN, CHG, PCHG, TURNOVERRATE, VOTURNOVER, VATURNOVER"
+			+" from PRICE_HISTORY"
+			+" where Date >= #{fromDate}"
+			+" Date <= #{toDate}"
+			+" order by CODE, DATE")
+	public List<PriceHistory> selectPriceHistoriesByFromToDate(String fromDate, String toDate);
+	
+	
 	@Select("select DISTINCT code from PRICE_HISTORY")
 	public List<String> selectAllCodes();
 	
