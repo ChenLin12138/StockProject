@@ -18,19 +18,19 @@ import com.lin.stock.service.test.BaseServiceTest;
 public class BaseTradeStrategy extends BaseServiceTest {
 
 	@Autowired
-	PriceHistoryService priceHistoryService;
+	protected PriceHistoryService priceHistoryService;
 	
 	@Autowired
-	MovingAverageService movingAverageService;
+	protected MovingAverageService movingAverageService;
 	
 	@Autowired
-	MACorssService maCorssService;
+	protected MACorssService maCorssService;
 	
 	@Autowired
-	TurnOverService turnOverService;
+	protected TurnOverService turnOverService;
 	
 	@Autowired
-	BusinessDateService businessDateService;
+	protected BusinessDateService businessDateService;
 	
 	protected Trade trade = new Trade();
 	

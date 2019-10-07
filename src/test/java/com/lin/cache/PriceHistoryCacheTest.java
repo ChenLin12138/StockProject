@@ -29,7 +29,7 @@ public class PriceHistoryCacheTest extends BaseServiceTest{
 	
 	@Test
 	public void shouldReturn6706AsSize() {
-		Assert.assertTrue(6706==priceHistoryCache.getStockTradeList("000001").size());;
+		Assert.assertTrue(6705==priceHistoryCache.getStockTradeList("000001").size());;
 	}
 	
 	@Test

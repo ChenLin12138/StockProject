@@ -32,17 +32,24 @@ public class PriceHistoryCache {
 //	}
 	
 	public void loadCache() {
+		if(!isEmpty()) {
+			cacheMap.clear();
+		}
 		List<String> stockCodes = priceHistoryService.getAllStockCode();
 		for(String stockCode : stockCodes) {
-//			System.out.println(stockCode);
-			List<PriceHistory> tradeDates = priceHistoryService.getPriceHistoryByStockCode(stockCode);
-			TreeList treeList = new TreeList(tradeDates);
-			cacheMap.put(stockCode, treeList);
+			putOneStockTradesIntoCache(stockCode);
 		}
 	}
 	
 	public void LoadCacheByStock(String stockCode) {	
+		if(!isEmpty()) {
+			cacheMap.clear();
+		}
 		//加载某只股票所有交易记录
+		putOneStockTradesIntoCache(stockCode);
+	}
+
+	private void putOneStockTradesIntoCache(String stockCode) {
 		List<PriceHistory> tradeDates = priceHistoryService.getPriceHistoryByStockCode(stockCode);
 		TreeList treeList = new TreeList(tradeDates);
 		cacheMap.put(stockCode, treeList);
@@ -53,10 +60,15 @@ public class PriceHistoryCache {
 	}
 	
 	public PriceHistory getPriceHistoryInfo(String stockCode, String date) {
+		PriceHistory priceHistory = createPriceHistoryWithCodeAndDate(stockCode, date);
+		return getPriceHistoryInfo(priceHistory);
+	}
+
+	private PriceHistory createPriceHistoryWithCodeAndDate(String stockCode, String date) {
 		PriceHistory priceHistory = new PriceHistory();
 		priceHistory.setCode(stockCode);
 		priceHistory.setDate(date);
-		return getPriceHistoryInfo(priceHistory);
+		return priceHistory;
 	}
 	
 	public PriceHistory getPriceHistoryInfo(PriceHistory priceHistory){
@@ -65,9 +77,7 @@ public class PriceHistoryCache {
 	}
 		
 	public List<PriceHistory> getPreviousPriceHistoryInfos(String stockCode, String date, int numberOfdays) throws InValidDateException{
-		PriceHistory priceHistory = new PriceHistory();
-		priceHistory.setCode(stockCode);
-		priceHistory.setDate(date);
+		PriceHistory priceHistory = createPriceHistoryWithCodeAndDate(stockCode, date);
 		return getPreviousPriceHistoryInfos(priceHistory,numberOfdays);
 	}
 	
@@ -85,9 +95,7 @@ public class PriceHistoryCache {
 	}
 	
 	public List<PriceHistory> getNextPriceHistoryInfos(String stockCode, String date, int numberOfdays) throws InValidDateException{
-		PriceHistory priceHistory = new PriceHistory();
-		priceHistory.setCode(stockCode);
-		priceHistory.setDate(date);
+		PriceHistory priceHistory = createPriceHistoryWithCodeAndDate(stockCode, date);
 		return getNextPriceHistoryInfos(priceHistory,numberOfdays);
 	}
 	
