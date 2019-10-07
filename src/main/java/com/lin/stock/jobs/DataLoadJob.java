@@ -27,6 +27,9 @@ import com.opencsv.CSVReader;
 @Component
 public class DataLoadJob {
 	
+	private static final  String beginDate = "20190521";
+	private static final  String endDate = "20190930";
+	
 	@Autowired
 	private PriceHistoryMapper mapper;
 	/*
@@ -80,7 +83,7 @@ public class DataLoadJob {
 	public void fullDownloadFor1Market(String marketCode) throws IOException {
 		
 		for(int stockCode = 1 ; stockCode < 999; stockCode++) {	
-			FileDownloadURL url = new FileDownloadURL.Builder(marketCode, StockCodeGenerator.generate(stockCode), "19900101", "30000101")
+			FileDownloadURL url = new FileDownloadURL.Builder(marketCode, StockCodeGenerator.generate(stockCode), beginDate, endDate)
 					//这些变量的构造顺序决定了下载下来csv文件的顺序
 					.tclose().high().low().topen().lclose().chg()
 					.pchg().turnover().voturnover().vaturnover()

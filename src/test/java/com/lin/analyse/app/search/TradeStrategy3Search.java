@@ -14,7 +14,6 @@ import com.lin.stock.cache.PriceHistoryCache;
 import com.lin.stock.exceptions.InValidDateException;
 import com.lin.stock.filters.DividendRightFilter;
 import com.lin.stock.model.PriceHistory;
-import com.lin.stock.model.Trade;
 import com.lin.stock.utils.FileUtil;
 
 /**
@@ -22,19 +21,18 @@ import com.lin.stock.utils.FileUtil;
  * @date 2019-10-07
  */
 
+
 /*
  * 买入策略：
  * 1.五日均线上穿30日线
- * 2.成交量在10个交易日内出现3次大于10日中位数的2倍
  * 卖出策略：
  * 1.收盘价下破10日均线
  * */
-public class TradeStrategy2Search extends BaseTradeStrategy{
+public class TradeStrategy3Search extends BaseTradeStrategy {
 
-	
 	public static final int STATISTICS_START_DATE = 30;
 	
-	public static final String SearchDate = "20190520";
+	public static final String SearchDate = "20190930";
 	public static final String cacheStartDate = "20190601";
 	public static final String cachedEndDate = "20190930";
 	
@@ -51,7 +49,7 @@ public class TradeStrategy2Search extends BaseTradeStrategy{
 		priceHistoryCache.LoadCacheByDateRange(cacheStartDate,cachedEndDate);
 		sw.stop();
         System.out.println(sw.prettyPrint());
-		sw.start("TradeStrategy2Search");
+		sw.start("TradeStrategy3Search");
 		List<String> stockCodes = priceHistoryService.getAllStockCode();
 		List<String> report = new ArrayList<String>(200);
 		report.add("StockCode");
@@ -59,7 +57,7 @@ public class TradeStrategy2Search extends BaseTradeStrategy{
 			List<String> tradeDates = priceHistoryCache.getStockTradeList(stockCode).stream().map(PriceHistory::getDate).collect(Collectors.toList());			
 			if(tradeDates.size() > STATISTICS_START_DATE) { 
 				try {
-					if(maCorssService.isMA5CrossMA30Up(stockCode, SearchDate) && turnOverService.isIncreaseTimesWithMedian(stockCode, SearchDate, 10, 2, 3)) {
+					if(maCorssService.isMA5CrossMA30Up(stockCode, SearchDate)) {
 						report.add(stockCode);			
 					}
 				}catch(InValidDateException e) {
@@ -67,7 +65,7 @@ public class TradeStrategy2Search extends BaseTradeStrategy{
 				}
 			}
 		}
-		FileUtil.write("TradeStratety2Search"+SearchDate+".csv", report);
+		FileUtil.write("TradeStratety3Search"+SearchDate+".csv", report);
 		sw.stop();
         System.out.println(sw.prettyPrint());
 	}

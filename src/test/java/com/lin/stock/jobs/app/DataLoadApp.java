@@ -38,6 +38,7 @@ public class DataLoadApp {
 	
 	@Test
 	@Rollback(false)
+	//数据下载和插入
 	public void fullDataLoad() throws IOException, ParseException {
 				
 		StopWatch sw = new StopWatch();	
