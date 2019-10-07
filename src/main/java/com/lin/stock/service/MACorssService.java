@@ -63,4 +63,10 @@ public class MACorssService {
 		return tclose < currentDateMA10;
 	}
 	
+	public boolean isTclosePriceUnderMA5(String stockCode, String date) throws InValidDateException {
+		float currentDateMA5 = movingAverageService.getAverage(date, MovingAverageService.MA5, stockCode);
+		float tclose = priceHistoryCache.getPriceHistoryInfo(stockCode,date).getTclose();
+		return tclose < currentDateMA5;
+	}
+	
 }
