@@ -22,6 +22,6 @@ public class StockMapperTest extends BaseMybatisMappterTest{
 	@Test
 	public void shouldReturnListSizeIs3707() {
 		List<Stock> stocks = mapper.selectAll();
-		Assert.assertTrue(3707 == stocks.size());
+		Assert.assertTrue(3752 == stocks.size());
 	}
 }

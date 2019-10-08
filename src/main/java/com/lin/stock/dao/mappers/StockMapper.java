@@ -11,7 +11,6 @@ import com.lin.stock.model.Stock;
 public interface StockMapper {
 
 	
-	@Select("select code"
-	+ " from STOCK")
+	@Select("select DISTINCT code from PRICE_HISTORY")
 	public List<Stock> selectAll();
 }

@@ -27,8 +27,8 @@ import com.opencsv.CSVReader;
 @Component
 public class DataLoadJob {
 	
-	private static final  String beginDate = "20190521";
-	private static final  String endDate = "20190930";
+	private static final  String beginDate = "20190930";
+	private static final  String endDate = "20191008";
 	
 	@Autowired
 	private PriceHistoryMapper mapper;
