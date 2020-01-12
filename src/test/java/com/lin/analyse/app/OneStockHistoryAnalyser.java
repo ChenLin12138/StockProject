@@ -31,8 +31,8 @@ public class OneStockHistoryAnalyser {
 
 	
 	private String stockCode = "600009";
-	private String beginDateOfMonth = "0201";
-	private String endDateOfMonth = "0229";
+	private String beginDateOfMonth = "0101";
+	private String endDateOfMonth = "0131";
 	private int startYear = 1990;
 	private int endYear = 2019;
 	
@@ -49,7 +49,7 @@ public class OneStockHistoryAnalyser {
 			
 			if(null != priceHistories && !priceHistories.isEmpty()) {					
 				PriceChange priceChange = priceHistoryService.caculatePriceChange(priceHistories.get(0),priceHistories.get(priceHistories.size()-1));
-				System.out.println(stockCode+","+year+","+priceChange.getPchg()*100+"%");
+				System.out.println(stockCode+","+year+","+priceChange.getChg());
 			}
 		}
 	}
