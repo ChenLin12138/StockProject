@@ -143,33 +143,36 @@ public class DateRangeAnalyser {
 		
 		for(Stock stock : stocks) {
 			float counter = 0.f;
-			float gain = 0.f;
-			float loss = 0.f;
+			float floatMaxGain = 0.f;
+			float floatMaxLoss = 0.f;
+			String maxGain = "";
+			String maxLoss = "";
 			List<PriceChange> priceChangesByStockCode = priceChangeListGroupByCode.get(stock.getCode());	
 	
 			if(priceChangeListGroupByCode.containsKey(stock.getCode())) {
 				for(PriceChange priceChange : priceChangesByStockCode) {
 					if(priceChange.getPchg() > 0) {
 						counter ++;
-					}
-					
-					if(priceChange.getPchg() >= 0.f) {
-						gain += priceChange.getPchg();
+						if(floatMaxGain < priceChange.getPchg()) {
+							floatMaxGain = priceChange.getPchg();
+							maxGain= priceChange.getChg();	
+						}
 					}else {
-						loss += priceChange.getPchg();
+						if(floatMaxLoss > priceChange.getPchg()) {
+							floatMaxLoss = priceChange.getPchg();
+							maxLoss= priceChange.getChg();
+						}
 					}
-					
 				}
 			}
 		
 			if(counter > countThreshold && counter/priceChangesByStockCode.size() > rateThreshold) {
-					System.out.println(stock.getCode()+","+(int)counter+","+priceChangesByStockCode.size()+","+counter/priceChangesByStockCode.size()+","+gain * 100/priceChangesByStockCode.size()+"%,"+ loss * 100/priceChangesByStockCode.size()+"%");
+					System.out.println(stock.getCode()+","+(int)counter+","+priceChangesByStockCode.size()+","+counter/priceChangesByStockCode.size() * 100 +"%"+","+maxGain+ maxLoss);
 			}	
 		}
 		
 		sw.stop();
         System.out.println(sw.prettyPrint());
 	
-	}
-	
+	}	
 }
