@@ -24,7 +24,7 @@ public class MACorssServiceTest extends BaseServiceTest{
 	
 	@Before
 	public void loadCache() {
-		priceHistoryCache.LoadCacheByStock("000001");
+//		priceHistoryCache.LoadCacheByStock("000001");
 		priceHistoryCache.LoadCacheByStock("000783");
 	}
 	
@@ -48,13 +48,15 @@ public class MACorssServiceTest extends BaseServiceTest{
 		Assert.assertFalse(maCrossService.isMA5CorssMA30Down("000783", "20190130"));
 	}
 	
-	@Test
-	public void shouldReturnTrueWhen19940531Stock000001() throws InValidDateException {
-		Assert.assertTrue(maCrossService.isMA5CorssMA30Down("000001", "19940531"));
-	}
 	
-	@Test
-	public void shouldReturnTrueWhenDate19950512Stock000001() throws InValidDateException {
-		Assert.assertTrue(maCrossService.isTclosePriceUnderMA10("000001", "19940513"));
-	}
+//	仅缓存000001的时候才生效
+//	@Test
+//	public void shouldReturnTrueWhen19940531Stock000001() throws InValidDateException {
+//		Assert.assertTrue(maCrossService.isMA5CorssMA30Down("000001", "19940531"));
+//	}
+//	
+//	@Test
+//	public void shouldReturnTrueWhenDate19950512Stock000001() throws InValidDateException {
+//		Assert.assertTrue(maCrossService.isTclosePriceUnderMA10("000001", "19940513"));
+//	}
 }

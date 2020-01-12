@@ -44,7 +44,7 @@ public interface PriceHistoryMapper {
 	+ " where CODE = #{stockCode}"
 	+ " and DATE >= #{beginDate}"
 	+ " and DATE <= #{endDate}"
-	+ " order by CODE, DATE")
+	+ " order by DATE")
 	public List<PriceHistory> selectByStockCodeAndDateRange(String stockCode, String beginDate, String endDate);
 		
 	@Select("select pk, CODE,DATE, TCLOSE, HIGH, LOW, TOPEN, CHG, PCHG, TURNOVERRATE, VOTURNOVER, VATURNOVER"

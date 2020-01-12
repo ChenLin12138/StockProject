@@ -101,41 +101,10 @@ public class PriceHistoryService {
 	} 
 		
 	//暂时打开这个方法让外面的类调用
-	public PriceChange caculatePriceChange(PriceHistory begin, PriceHistory end) {
-		
-		PriceChange priceChange =  new PriceChange();
+	public PriceChange caculatePriceChange(PriceHistory begin, PriceHistory end) {	
 		//其实这里应该减去startDate前一天的收盘价，我就偷懒了
 		//可以理解在这样的区间(begin,end]
-		priceChange.setChg(end.getTclose() - begin.getTclose());
-		priceChange.setCode(begin.getCode());
-		priceChange.setPchg(end.getTclose()/begin.getTclose() -1);
-		priceChange.setBeginDate(begin.getDate());
-		priceChange.setEndDate(end.getDate());
-		return priceChange;
+		return new PriceChange(begin,end);
 	}
-	
-
-	
-	//这个方法可以和下面的方法通过lambda表达式合并成为一个方法。
-	private String getActualFromDate(String stockCode, String date) {
-		
-		while(null == getPriceHistoryWithStockCodeAndDate(stockCode, date)) {
-			date = DateUtil.getNextDate(date);
-		}
-		
-		return date;
-	}
-	
-	//这个方法可以和上面的方法通过lambda表达式合并成为一个方法。
-	private String getActualEndDate(String stockCode, String date) {
-		
-		while(null == getPriceHistoryWithStockCodeAndDate(stockCode, date)) {
-			date = DateUtil.getPrevDate(date);
-		}
-		
-		return date;
-	}
-	
-	
 	
 }

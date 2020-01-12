@@ -37,9 +37,9 @@ import com.lin.stock.service.StockService;
 public class DateRangeAnalyser {
 	
 	private int countThreshold = 10;
-	private float rateThreshold = 0.6f;
-	private String beginDateOfMonth = "1001";
-	private String endDateOfMonth = "1030";
+	private float rateThreshold = 0.60f;
+	private String beginDateOfMonth = "0101";
+	private String endDateOfMonth = "0131";
 	private int startYear = 1990;
 	private int endYear = 2019;
 
@@ -61,14 +61,14 @@ public class DateRangeAnalyser {
 			priceChanges.clear();
 			float counter = 0.f;
 			float sum = 0.f;
-			for(int year = startYear; year < endYear; year++) {
+			for(int year = startYear; year <= endYear; year++) {
 				String beginDate = String.valueOf(year)+beginDateOfMonth;
 				String endDate = String.valueOf(year)+endDateOfMonth;			
 				//我们是否可以在这里启动多个线程去数据库获取值？并且把这个值放入priceChanges中
 				PriceChange priceChange = priceHistoryService.getStockPriceChangeByDateRange(stock.getCode(), beginDate, endDate);
 				
 				if(null != priceChange) {
-					if (priceChange.getChg() > 0 ) {
+					if (priceChange.getPchg() > 0 ) {
 						counter ++;
 					} 
 					priceChanges.add(priceChange);	
@@ -106,9 +106,10 @@ public class DateRangeAnalyser {
 		List<Stock> stocks = stockService.getAllStock();
 		Map<String, List<PriceChange>> priceChangeListGroupByCode = new HashMap<String, List<PriceChange>>();
 		
-		for(int year = startYear; year < endYear; year++) {
+		for(int year = startYear; year <= endYear; year++) {
 			String beginDate = String.valueOf(year)+beginDateOfMonth;
 			String endDate = String.valueOf(year)+endDateOfMonth;
+			//获取某一时段内的所有股票交易记录
 			List<PriceHistory> priceHistories = priceHistoryService.getStockPriceByDateRange(beginDate, endDate);
 			
 			if(null != priceHistories && !priceHistories.isEmpty()) {
@@ -148,7 +149,7 @@ public class DateRangeAnalyser {
 	
 			if(priceChangeListGroupByCode.containsKey(stock.getCode())) {
 				for(PriceChange priceChange : priceChangesByStockCode) {
-					if(priceChange.getChg() > 0) {
+					if(priceChange.getPchg() > 0) {
 						counter ++;
 					}
 					
